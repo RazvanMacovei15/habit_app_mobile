@@ -12,7 +12,7 @@ import { icons } from "../../constants";
 
 const TopNav = () => {
   return (
-    <View className="flex-row justify-around mt-12">
+    <View className="flex-row justify-around mt-12 p-1 bg-blue-100">
       <TouchableOpacity className="justify-center items-center">
         <Image
           source={icons.user_circle as ImageSourcePropType}

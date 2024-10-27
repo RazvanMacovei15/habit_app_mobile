@@ -1,16 +1,7 @@
-import {
-  View,
-  Text,
-  Image,
-  ImageSourcePropType,
-  TouchableOpacity,
-  Button,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ActivityIndicator, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import TopNav from "@/components/top_navigation/topNav";
 import HabitCard from "@/components/HabitCard";
-import { icons } from "../../constants";
 import EditCustomButton from "@/components/CustomButton";
 import DeleteCustomButton from "@/components/DeleteCustomButton";
 import PlusCustomButton from "@/components/PlusCustomButton";
@@ -60,21 +51,27 @@ const Habits = () => {
   return (
     <View className="flex-1 flex-col justify-start">
       <TopNav />
-      <View className="b flex-1 justify-start p-3 ">
-        <View className="grow gap-2 justify-start flex-col ">
-          {data.map((item, key) => (
-            <HabitCard
-              key={key}
-              userId={item.userId}
-              username={item.username}
-              habitId={item.habitId}
-              habit={item.habitName}
-              habitCompleted={item.habitCompleted}
-              currentStreak={item.currentStreak}
-            />
-          ))}
+      <View className="border-2 border-red-700 flex-1 justify-start p-3 ">
+        <View className="h-20 justify-center items-center border-2">
+          <Text>Insert daily navigations here</Text>
         </View>
-        <View className="h-20items-center justify-around flex-row items-center">
+        <ScrollView>
+          <View className=" gap-2 justify-start flex-col border-2">
+            {data.map((item, key) => (
+              <HabitCard
+                key={key}
+                userId={item.userId}
+                username={item.username}
+                habitId={item.habitId}
+                habit={item.habitName}
+                habitCompleted={item.habitCompleted}
+                currentStreak={item.currentStreak}
+              />
+            ))}
+          </View>
+        </ScrollView>
+
+        <View className="h-20 items-center justify-around flex-row border-2">
           <EditCustomButton />
           <PlusCustomButton />
           <DeleteCustomButton />

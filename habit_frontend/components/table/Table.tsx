@@ -47,23 +47,6 @@ export default function Table() {
       {data.map((entry, index) => (
         <TableEntry key={index} entry={entry} />
       ))}
-
-      <View className="flex-row">
-        <NavBarButton
-          label="Habits"
-          onPress={() => fetchData("http://maco-coding.go.ro:8010/habits/all")}
-        />
-        <NavBarButton
-          label="Users"
-          onPress={() => fetchData("http://maco-coding.go.ro:8010/users/all")}
-        />
-        <NavBarButton
-          label="UserHabits"
-          onPress={() =>
-            fetchData("http://maco-coding.go.ro:8010/user/userHabits/all")
-          }
-        />
-      </View>
     </View>
   );
 }

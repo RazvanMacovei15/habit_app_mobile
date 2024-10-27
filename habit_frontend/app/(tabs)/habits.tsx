@@ -4,80 +4,80 @@ import {
   Image,
   ImageSourcePropType,
   TouchableOpacity,
+  Button,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopNav from "@/components/top_navigation/topNav";
+import HabitCard from "@/components/HabitCard";
 import { icons } from "../../constants";
-import BounctCheckBox from "react-native-bouncy-checkbox";
+import EditCustomButton from "@/components/CustomButton";
+import DeleteCustomButton from "@/components/DeleteCustomButton";
+import PlusCustomButton from "@/components/PlusCustomButton";
+import axios from "axios";
 
 const Habits = () => {
+  interface Habit {
+    username: string;
+    userId: number;
+    habitId: number;
+    habitName: string;
+    habitCompleted: boolean;
+    currentStreak: number;
+  }
+
+  const [data, setData] = useState<Habit[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch data from the API based on the endpoint
+  const fetchData = async (endpoint: string) => {
+    setLoading(true); // Start loading spinner when fetching data
+    setError(null); // Clear previous errors
+    try {
+      const response = await axios.get(endpoint);
+      setData(response.data); // Assuming response.data is an array of objects
+    } catch (err: any) {
+      setError(err.message); // Handle error
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
+  // Initial fetch for the default data
+  useEffect(() => {
+    fetchData("http://maco-coding.go.ro:8010/users/1/habits");
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />; // Show loading spinner
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>; // Show error message
+  }
+
   return (
     <View className="flex-1 flex-col justify-start">
       <TopNav />
-      <View className="b flex-1 justify-center gap-2 p-2  bg-blue-200">
-        <TouchableOpacity className="bg-yellow-300 rounded-xl p-2 flex-row justify-between items-center">
-          <Text className="text-start text-2xl text-black w-5/6">
-            Water with salt
-          </Text>
-          <View>
-            <BounctCheckBox
-              size={35}
-              fillColor="red"
-              unFillColor="#FFFFFF"
-              disableText={true}
-              iconStyle={{
-                borderColor: "purple",
-              }}
-              innerIconStyle={{
-                borderWidth: 2,
-              }}
-              textStyle={{
-                fontFamily: "JosefinSans-Regular",
-              }}
-              onPress={(isChecked: boolean) => {
-                console.log(isChecked);
-              }}
-            ></BounctCheckBox>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-black rounded-xl p-2 flex-row justify-between items-center">
-          <Text className="text-start text-2xl text-white ">
-            Wake up at 5am
-          </Text>
-          <View>
-            <BounctCheckBox
-              size={35}
-              disableText={true}
-              fillColor="red"
-              unFillColor="#FFFFFF"
-              iconStyle={{ borderColor: "red" }}
-              innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{ fontFamily: "JosefinSans-Regular" }}
-              onPress={(isChecked: boolean) => {
-                console.log(isChecked);
-              }}
-            ></BounctCheckBox>
-          </View>
-        </TouchableOpacity>
-        <View className="bg-purple-500 rounded-xl p-2 flex-row justify-between items-center">
-          <Text className="text-start text-2xl text-white w-5/6">
-            Take vitamins and creatine
-          </Text>
-          <View>
-            <BounctCheckBox
-              size={35}
-              disableText={true}
-              fillColor="red"
-              unFillColor="#FFFFFF"
-              iconStyle={{ borderColor: "red" }}
-              innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{ fontFamily: "JosefinSans-Regular" }}
-              useBuiltInState={true}
-              onPress={(isChecked: boolean) => {
-                console.log(isChecked);
-              }}
-            ></BounctCheckBox>
-          </View>
+      <View className="b flex-1 justify-start p-3 ">
+        <View className="grow gap-2 justify-start flex-col ">
+          {data.map((item, key) => (
+            <HabitCard
+              key={key}
+              userId={item.userId}
+              username={item.username}
+              habitId={item.habitId}
+              habit={item.habitName}
+              habitCompleted={item.habitCompleted}
+              currentStreak={item.currentStreak}
+            />
+          ))}
+        </View>
+        <View className="h-20items-center justify-around flex-row items-center">
+          <EditCustomButton />
+          <PlusCustomButton />
+          <DeleteCustomButton />
         </View>
       </View>
     </View>

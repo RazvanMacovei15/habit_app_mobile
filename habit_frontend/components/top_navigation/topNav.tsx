@@ -12,8 +12,8 @@ import { icons } from "../../constants";
 
 const TopNav = () => {
   return (
-    <View className="flex-row justify-around mt-12 p-1 bg-blue-100">
-      <TouchableOpacity className="justify-center items-center">
+    <View className="flex-row justify-around mt-12 p-1 ">
+      <TouchableOpacity className="justify-center items-center w-1/4">
         <Image
           source={icons.user_circle as ImageSourcePropType}
           className="h-14 w-14"
@@ -21,11 +21,11 @@ const TopNav = () => {
       </TouchableOpacity>
       <TouchableOpacity className="flex-col w-2/4 items-center justify-center">
         <Text className="text-4xl rounded-lg p-2 font-medium">FOCUS</Text>
-        <Text className="text-center text-xs text-red-600 w-full">
+        <Text className="text-center text-xs text-black w-full">
           That which you don't track{"\n"} You can't improve
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity className="items-center justify-center">
+      <TouchableOpacity className="items-center justify-center w-1/4">
         <Image
           source={icons.notification as ImageSourcePropType}
           className="h-8 w-8"

@@ -1,18 +1,85 @@
-import { View, Text } from "react-native";
-import "../global.css";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
+import axios from "axios";
+import BounctCheckBox from "react-native-bouncy-checkbox";
 
-type HabitCardProps = {
-    name: string;
-    description: string;
-    streak: number;
+interface HabitCardProps {
+  username: string;
+  userId: number;
+  habitId: number;
+  habit: string;
+  habitCompleted: boolean;
+  currentStreak: number;
 }
 
-export default function HabitCard({name, description, streak}: HabitCardProps) {
-    return (
-        <View className="p-10">
-            <Text >
-                {name} | {description} |  {streak}
-            </Text>
+const HabitCard = ({
+  username,
+  userId,
+  habitId,
+  habit,
+  currentStreak,
+  habitCompleted,
+}: HabitCardProps) => {
+  const [expanded, setExpanded] = useState(false);
+  const [isCompletedFromDB, setIsCompletedFromDB] = useState(habitCompleted);
+
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    <View className="gap-2">
+      <TouchableOpacity
+        onPress={toggleExpand}
+        activeOpacity={0.8}
+        className="bg-yellow-300 rounded-xl p-2 flex-row justify-between items-center h-14"
+      >
+        <Text className="text-start text-2xl text-black w-5/6">{habit}</Text>
+        <View>
+          <BounctCheckBox
+            size={35}
+            isChecked={isCompletedFromDB}
+            fillColor="red"
+            unFillColor="#FFFFFF"
+            disableText={true}
+            iconStyle={{
+              borderColor: "purple",
+            }}
+            innerIconStyle={{
+              borderWidth: 2,
+            }}
+            textStyle={{
+              fontFamily: "JosefinSans-Regular",
+            }}
+            onPress={(isChecked: boolean) => {
+              console.log(isChecked);
+            }}
+          ></BounctCheckBox>
         </View>
-    )
+      </TouchableOpacity>
+      {expanded && (
+        <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
+          <Text className="text-gray-800 text-xl">
+            Habit {habitId} is {habitCompleted ? "completed" : "not completed"}
+            {"\n"}
+            {"\n"}
+            {username} your current streak is: {currentStreak}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default HabitCard;
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}
+
+function setError(arg0: null) {
+  throw new Error("Function not implemented.");
+}
+
+function setData(data: any) {
+  throw new Error("Function not implemented.");
 }

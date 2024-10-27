@@ -17,8 +17,14 @@ import more from "../assets/icons/more.png";
 import logo from "../assets/icons/logo.png";
 import notification from "../assets/icons/notification.png";
 import user_circle from "../assets/icons/user_circle.png";
+import update from "../assets/icons/update.png";
+import deletePNG from "../assets/icons/delete.png";
+import edit from "../assets/icons/edit.png";
 
 export default {
+  edit,
+  deletePNG,
+  update,
   user_circle,
   notification,
   logo,

@@ -8,16 +8,23 @@ import {
 import React from "react";
 import { icons } from "../constants";
 
-const EditCustomButton = () => {
+interface SigninButtonProps {
+  handlePress: () => void;
+  title: string;
+  isLoading?: boolean;
+}
+const CustomButon = ({ handlePress, title, isLoading }: SigninButtonProps) => {
   return (
-    <TouchableOpacity>
-      <Image
-        source={icons.edit as ImageSourcePropType}
-        className="w-10 h-10"
-        tintColor={"black"}
-      />
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={handlePress}
+      className="items-center justify-center"
+    >
+      <Text className="bg-yellow-400 w-full text-black p-5 w-[200px] text-center rounded-xl text-2xl">
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
 
-export default EditCustomButton;
+export default CustomButon;

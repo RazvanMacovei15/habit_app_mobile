@@ -1,7 +1,5 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import "../global.css";
-
-import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect, router } from "expo-router";
 import CustomButon from "@/components/CustomButton";

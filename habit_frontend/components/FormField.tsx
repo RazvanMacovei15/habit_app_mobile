@@ -28,9 +28,9 @@ const FormField = ({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <View className={"space-y-2 ${otherStyles}"}>
+    <View className={"space-y-2 ${otherStyles} mt-5"}>
       <Text className="text-yellow-300 text-3xl">{title}:</Text>
-      <View className="bg-gray-700 w-full h-16 flex flex-row px-4 rounded-2xl focus:border-orange-600 items-center">
+      <View className="bg-gray-700 w-full h-16 flex flex-row px-4 rounded-2xl items-center">
         <TextInput
           className="flex-1 text-white"
           value={value}
@@ -47,8 +47,8 @@ const FormField = ({
             <Image
               source={
                 !showPassword
-                  ? (icons.eye as ImageSourcePropType)
-                  : (icons.eyeHide as ImageSourcePropType)
+                  ? (icons.eyeHide as ImageSourcePropType)
+                  : (icons.eye as ImageSourcePropType)
               }
               className="w-8 h-8"
               resizeMode="contain"

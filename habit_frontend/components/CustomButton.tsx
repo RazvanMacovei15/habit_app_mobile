@@ -20,7 +20,11 @@ const CustomButon = ({ handlePress, title, isLoading }: SigninButtonProps) => {
       onPress={handlePress}
       className="items-center justify-center"
     >
-      <Text className="bg-yellow-400 w-full text-black p-5 w-[200px] text-center rounded-xl text-2xl">
+      <Text
+        className={
+          "bg-yellow-400 text-black p-5 w-full text-center rounded-xl text-2xl"
+        }
+      >
         {title}
       </Text>
     </TouchableOpacity>

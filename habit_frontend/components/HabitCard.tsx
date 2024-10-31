@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
-import BounctCheckBox from "react-native-bouncy-checkbox";
+import BouncyCheckBox from "react-native-bouncy-checkbox";
 
 interface HabitCardProps {
   username: string;
@@ -20,11 +20,11 @@ const HabitCard = ({
   currentStreak,
   habitCompleted,
 }: HabitCardProps) => {
-  const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState(false);
   const [isCompletedFromDB, setIsCompletedFromDB] = useState(habitCompleted);
 
   const toggleExpand = () => {
-    setExpanded(!expanded);
+    setSelected(!selected);
   };
 
   return (
@@ -36,7 +36,7 @@ const HabitCard = ({
       >
         <Text className="text-start text-2xl text-black w-5/6">{habit}</Text>
         <View>
-          <BounctCheckBox
+          <BouncyCheckBox
             size={35}
             isChecked={isCompletedFromDB}
             fillColor="red"
@@ -54,10 +54,10 @@ const HabitCard = ({
             onPress={(isChecked: boolean) => {
               console.log(isChecked);
             }}
-          ></BounctCheckBox>
+          ></BouncyCheckBox>
         </View>
       </TouchableOpacity>
-      {expanded && (
+      {selected && (
         <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
           <Text className="text-gray-800 text-xl">
             Habit {habitId} is {habitCompleted ? "completed" : "not completed"}

@@ -3,8 +3,12 @@ import "../global.css";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect, router } from "expo-router";
 import CustomButon from "@/components/CustomButton";
+import { useAuth } from "./context/AuthContext";
 
 export default function App() {
+  const { authState } = useAuth();
+
+  
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={{ height: "100%" }}>

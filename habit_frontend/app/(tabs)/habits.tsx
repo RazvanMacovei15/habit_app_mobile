@@ -12,15 +12,15 @@ const Habits = () => {
   return (
     <View className="flex-1 flex-col justify-start">
       <TopNav />
-      <View className="border-2 border-red-700 flex-1 flex p-3 ">
-        <View className="h-20 justify-center items-center border-2">
+      <View className=" flex-1 flex p-3 ">
+        <View className="h-20 justify-center items-center ">
           <Text>Insert daily navigations here</Text>
         </View>
         <HabitsScrollView />
-        <View className="h-20 items-center justify-around flex-row border-2">
+        <View className="h-20 items-center justify-around flex-row ">
           <EditCustomButton />
-          <DeleteCustomButton />
           <PlusCustomButton />
+          <DeleteCustomButton />
         </View>
       </View>
     </View>

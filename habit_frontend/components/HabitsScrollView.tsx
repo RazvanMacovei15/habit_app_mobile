@@ -33,7 +33,7 @@ const HabitsScrollView = () => {
 
   // Initial fetch for the default data
   useEffect(() => {
-    fetchData("http://maco-coding.go.ro:8010/users/1/habits");
+    fetchData("http://maco-coding.go.ro:8010/users/52/habits");
   }, []);
 
   if (loading) {
@@ -48,7 +48,7 @@ const HabitsScrollView = () => {
 
   return (
     <ScrollView className="grow border-green-400">
-      <View className=" gap-2 justify-start flex-col border-2">
+      <View className=" gap-2 justify-start flex-col">
         {data.map((item, key) => (
           <HabitCard
             key={key}

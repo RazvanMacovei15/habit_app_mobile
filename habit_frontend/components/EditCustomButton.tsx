@@ -8,12 +8,16 @@ import {
 import React from "react";
 import { icons } from "../constants";
 
-const EditCustomButton = () => {
+interface EditCustomButtonProps {
+  isDisabled?: boolean;
+}
+
+const EditCustomButton = ({ isDisabled = true }: EditCustomButtonProps) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity disabled={isDisabled}>
       <Image
         source={icons.edit as ImageSourcePropType}
-        className="w-10 h-10"
+        className={`w-10 h-10 ${isDisabled ? "opacity-30" : ""}`}
         tintColor={"black"}
       />
     </TouchableOpacity>

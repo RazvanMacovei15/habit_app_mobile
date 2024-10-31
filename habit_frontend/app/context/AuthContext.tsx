@@ -18,7 +18,7 @@ interface AuthProps {
 
 // Constants
 const TOKEN_KEY = "my-jwt-token"; // Key used to store JWT token in secure storage
-export const API_URL = "http://maco-coding.go.ro:8010/"; // Base URL for the API
+export const API_URL = "10.0.2.2:8010/"; // Base URL for the API
 
 // Create the authentication context
 const AuthContext = createContext<AuthProps>({});

@@ -2,7 +2,6 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 import { Tabs, Redirect } from "expo-router";
 import { icons } from "../../constants";
-import TopNav from "@/components/top_navigation/topNav";
 
 interface TabIconProps {
   icon: any;
@@ -18,10 +17,10 @@ const TabIcon = ({ icon, color, name, focused }: TabIconProps) => {
         source={icon}
         resizeMode="contain"
         tintColor={color}
-        className="w-6 h-6"
+        className="w-9 h-9"
       ></Image>
       <Text
-        className={'${focused ? "font-psemibold" : "font-pregular"} text-xs'}
+        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
         style={{ color: color }}
       >
         {name}
@@ -40,8 +39,11 @@ const TabsLayout = () => {
           tabBarInactiveTintColor: "black",
           tabBarStyle: {
             backgroundColor: "gray",
-            borderTopColor: "transparent",
-            height: 50,
+            height: 60,
+            paddingBottom: 10,
+            paddingTop: 10,
+            borderTopEndRadius: 0,
+            borderTopStartRadius: 0,
           },
         }}
       >

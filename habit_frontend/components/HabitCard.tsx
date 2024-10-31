@@ -2,36 +2,59 @@ import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 import BouncyCheckBox from "react-native-bouncy-checkbox";
+import { useAuth } from "@/app/context/AuthContext";
 
-interface HabitCardProps {
-  username: string;
-  userId: number;
+interface Habit {
   habitId: number;
-  habit: string;
-  habitCompleted: boolean;
+  habitName: string;
+  completed: boolean;
   currentStreak: number;
+  isSelected?: boolean;
+  toggleExpand: () => void;
 }
 
 const HabitCard = ({
-  username,
-  userId,
   habitId,
-  habit,
+  habitName,
   currentStreak,
-  habitCompleted,
-}: HabitCardProps) => {
-  const [selected, setSelected] = useState(false);
-  const [isCompletedFromDB, setIsCompletedFromDB] = useState(habitCompleted);
+  completed,
+  isSelected,
+  toggleExpand,
+}: Habit) => {
+  const [habitData, setHabitData] = useState({
+    habitId,
+    habitName,
+    completed,
+    currentStreak,
+  });
 
-  const toggleExpand = () => {
-    setSelected(!selected);
-    console.log(!selected + "<- this is the state of selected");
+  // const toggleExpand = () => {
+  //   setSelected(!selected);
+  // };
+
+  const { authState } = useAuth();
+  const token = authState?.token;
+
+  const toggleCompleted = async (id: number) => {
+    try {
+      const response = await axios.patch(
+        `http://maco-coding.go.ro:8010/habits/${id}/update`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setHabitData(response.data);
+    } catch (err: any) {
+      console.log(err.message);
+    }
   };
 
   return (
     <View
       className={`gap-2 rounded-xl border-2
-        ${selected ? " border-red-500" : "border-transparent"}`}
+        ${isSelected ? " border-red-500" : "border-transparent"}`}
     >
       <TouchableOpacity
         onPress={toggleExpand}
@@ -40,11 +63,13 @@ const HabitCard = ({
           "bg-white rounded-xl p-2 flex-row justify-between items-center h-14 "
         }
       >
-        <Text className="text-start text-2xl text-black w-5/6">{habit}</Text>
+        <Text className="text-start text-2xl text-black w-5/6">
+          {habitData.habitName}
+        </Text>
         <View>
           <BouncyCheckBox
             size={35}
-            isChecked={isCompletedFromDB}
+            isChecked={completed}
             fillColor="red"
             unFillColor="#FFFFFF"
             disableText={true}
@@ -57,19 +82,20 @@ const HabitCard = ({
             textStyle={{
               fontFamily: "JosefinSans-Regular",
             }}
-            onPress={(isChecked: boolean) => {
-              console.log(isChecked);
+            onPress={() => {
+              toggleCompleted(habitId);
             }}
           ></BouncyCheckBox>
         </View>
       </TouchableOpacity>
-      {selected && (
+      {isSelected && (
         <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
           <Text className="text-gray-800 text-xl">
-            Habit {habitId} is {habitCompleted ? "completed" : "not completed"}
+            Habit {habitId} is{" "}
+            {habitData.completed ? "completed" : "not completed"}
             {"\n"}
             {"\n"}
-            {username} your current streak is: {currentStreak}
+            your current streak is: {currentStreak}
           </Text>
         </View>
       )}
@@ -78,6 +104,7 @@ const HabitCard = ({
 };
 
 export default HabitCard;
+
 function setLoading(arg0: boolean) {
   throw new Error("Function not implemented.");
 }

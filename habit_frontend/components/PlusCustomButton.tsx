@@ -8,12 +8,17 @@ import {
 import React from "react";
 import { icons } from "../constants";
 
-const EditCustomButton = () => {
+const PlusCustomButton = () => {
   return (
     <TouchableOpacity>
-      <Image source={icons.plus as ImageSourcePropType} tintColor={"black"} />
+      <Image
+        source={icons.plus as ImageSourcePropType}
+        tintColor={"black"}
+        resizeMode="contain"
+        className="w-18 h-18"
+      />
     </TouchableOpacity>
   );
 };
 
-export default EditCustomButton;
+export default PlusCustomButton;

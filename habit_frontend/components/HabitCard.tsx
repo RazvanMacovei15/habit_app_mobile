@@ -25,14 +25,20 @@ const HabitCard = ({
 
   const toggleExpand = () => {
     setSelected(!selected);
+    console.log(!selected + "<- this is the state of selected");
   };
 
   return (
-    <View className="gap-2">
+    <View
+      className={`gap-2 rounded-xl border-2
+        ${selected ? " border-red-500" : "border-transparent"}`}
+    >
       <TouchableOpacity
         onPress={toggleExpand}
         activeOpacity={0.8}
-        className="bg-yellow-300 rounded-xl p-2 flex-row justify-between items-center h-14"
+        className={
+          "bg-white rounded-xl p-2 flex-row justify-between items-center h-14 "
+        }
       >
         <Text className="text-start text-2xl text-black w-5/6">{habit}</Text>
         <View>

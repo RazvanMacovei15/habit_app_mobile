@@ -4,10 +4,10 @@ import TopNav from "@/components/top_navigation/topNav";
 
 import DeleteCustomButton from "@/components/DeleteCustomButton";
 import PlusCustomButton from "@/components/PlusCustomButton";
-import HabitsScrollView from "../../components/HabitsScrollView";
 import EditCustomButton from "@/components/EditCustomButton";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
+import HabitsScrollView from "../../components/HabitsScrollView";
 
 export type Habit = {
   id: number;
@@ -24,7 +24,65 @@ const Habits = () => {
 
   const handleSelectHabit = (habit: Habit | null) => {
     setSelectedHabit(habit);
+    console.log("Habit selected: ", habit);
   };
+
+  const [data, setData] = useState<Habit[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { authState } = useAuth();
+  const token = authState?.token;
+
+  const fetchData = async (endpoint: string, token: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setData(response.data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteData = async (endpoint: string, token: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.delete(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const newData = data.filter((habit) => habit.id !== selectedHabit?.id);
+      setData(newData);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchData("http://maco-coding.go.ro:8010/habits/all", token);
+    }
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator className="grow" size="large" color="#0000ff" />; // Show loading spinner
+  }
+
+  if (error) {
+    return (
+      <Text className="grow items-center justify-center">Error: {error}</Text>
+    );
+  }
 
   return (
     <View className="flex-1 flex-col justify-start h-full">
@@ -33,7 +91,9 @@ const Habits = () => {
         <View className="h-20 justify-center items-center border-2 bg-gray-100 rounded-3xl">
           <Text>Insert daily navigations here</Text>
         </View>
+
         <HabitsScrollView
+          data={data}
           selectedHabit={selectedHabit}
           onSelect={handleSelectHabit}
         />
@@ -45,6 +105,13 @@ const Habits = () => {
             selectedHabit={selectedHabit}
             onPress={() => {
               console.log("Delete button pressed");
+              if (selectedHabit && token) {
+                deleteData(
+                  `http://maco-coding.go.ro:8010/habits/${selectedHabit.id}/delete`,
+                  token
+                );
+                setSelectedHabit(null);
+              }
             }}
           />
         </View>

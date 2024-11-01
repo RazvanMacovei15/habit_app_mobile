@@ -9,7 +9,7 @@ export default function App() {
   const { authState } = useAuth();
 
   return (
-    <SafeAreaView className="bg-red-500">
+    <SafeAreaView>
       <ScrollView contentContainerStyle={{ height: "100%" }}>
         <View className="w-full items-center px-4 h-full justify-center">
           <CustomButon

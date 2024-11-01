@@ -3,34 +3,16 @@ import React, { useState } from "react";
 import axios from "axios";
 import BouncyCheckBox from "react-native-bouncy-checkbox";
 import { useAuth } from "@/app/context/AuthContext";
+import { Habit } from "@/app/(tabs)/habits";
 
-interface Habit {
-  habitId: number;
-  habitName: string;
-  completed: boolean;
-  currentStreak: number;
-  isSelected?: boolean;
-  toggleExpand: () => void;
+interface HabitCard {
+  habit: Habit;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-const HabitCard = ({
-  habitId,
-  habitName,
-  currentStreak,
-  completed,
-  isSelected,
-  toggleExpand,
-}: Habit) => {
-  const [habitData, setHabitData] = useState({
-    habitId,
-    habitName,
-    completed,
-    currentStreak,
-  });
-
-  // const toggleExpand = () => {
-  //   setSelected(!selected);
-  // };
+const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
+  const [habitData, setHabitData] = useState<Habit>(habit);
 
   const { authState } = useAuth();
   const token = authState?.token;
@@ -46,30 +28,35 @@ const HabitCard = ({
         }
       );
       setHabitData(response.data);
+      console.log(habitData);
     } catch (err: any) {
       console.log(err.message);
     }
   };
 
+  const handlePress = () => {
+    onSelect();
+  };
+
   return (
     <View
-      className={`gap-2 rounded-xl border-2
-        ${isSelected ? " border-red-500" : "border-transparent"}`}
+      className={`gap-2 rounded-xl border-2 
+        ${isSelected ? "border-red-500" : "border-transparent"}`}
     >
       <TouchableOpacity
-        onPress={toggleExpand}
+        onPress={handlePress}
         activeOpacity={0.8}
         className={
-          "bg-white rounded-xl p-2 flex-row justify-between items-center h-14 "
+          "bg-white rounded-xl p-2 flex-row justify-between items-center h-14"
         }
       >
         <Text className="text-start text-2xl text-black w-5/6">
-          {habitData.habitName}
+          {habit.habitName}
         </Text>
         <View>
           <BouncyCheckBox
             size={35}
-            isChecked={completed}
+            isChecked={habit.completed}
             fillColor="red"
             unFillColor="#FFFFFF"
             disableText={true}
@@ -83,7 +70,7 @@ const HabitCard = ({
               fontFamily: "JosefinSans-Regular",
             }}
             onPress={() => {
-              toggleCompleted(habitId);
+              toggleCompleted(habitData.id);
             }}
           ></BouncyCheckBox>
         </View>
@@ -91,11 +78,11 @@ const HabitCard = ({
       {isSelected && (
         <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
           <Text className="text-gray-800 text-xl">
-            Habit {habitId} is{" "}
+            Habit {habitData.id} is{" "}
             {habitData.completed ? "completed" : "not completed"}
             {"\n"}
             {"\n"}
-            your current streak is: {currentStreak}
+            your current streak is: {habitData.currentStreak}
           </Text>
         </View>
       )}

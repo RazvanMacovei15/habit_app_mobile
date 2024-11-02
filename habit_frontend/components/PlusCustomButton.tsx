@@ -8,9 +8,13 @@ import {
 import React from "react";
 import { icons } from "../constants";
 
-const PlusCustomButton = () => {
+interface PlusCustomButtonProps {
+  onPress: () => void;
+}
+
+const PlusCustomButton = ({ onPress }: PlusCustomButtonProps) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <Image
         source={icons.plus as ImageSourcePropType}
         tintColor={"black"}

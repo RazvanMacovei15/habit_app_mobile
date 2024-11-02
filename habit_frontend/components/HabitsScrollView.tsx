@@ -9,7 +9,6 @@ interface HabitsScrollView {
   selectedHabit: Habit | null;
   onSelect: (habit: Habit | null) => void;
   data: Habit[];
-  loading: boolean;
   error: any;
 }
 
@@ -17,13 +16,8 @@ const HabitsScrollView = ({
   selectedHabit,
   onSelect,
   data,
-  loading,
   error,
 }: HabitsScrollView) => {
-  if (loading) {
-    return <ActivityIndicator className="grow" size="large" color="#0000ff" />; // Show loading spinner
-  }
-
   if (error) {
     return (
       <Text className="grow items-center justify-center">Error: {error}</Text>

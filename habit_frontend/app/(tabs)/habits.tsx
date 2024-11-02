@@ -39,6 +39,7 @@ const Habits = () => {
   const [data, setData] = useState<Habit[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const { authState } = useAuth();
   const token = authState?.token;
 

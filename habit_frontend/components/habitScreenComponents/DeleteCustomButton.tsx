@@ -6,7 +6,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import React from "react";
-import { icons } from "../constants";
+import { icons } from "../../constants";
 import { Habit } from "@/app/(tabs)/habits";
 
 interface DeleteCustomButtonProps {
@@ -15,7 +15,7 @@ interface DeleteCustomButtonProps {
   onPress: () => void;
 }
 
-const EditCustomButton = ({
+const DeleteCustomButon = ({
   isDisabled = true,
   selectedHabit,
   onPress,
@@ -31,4 +31,4 @@ const EditCustomButton = ({
   );
 };
 
-export default EditCustomButton;
+export default DeleteCustomButon;

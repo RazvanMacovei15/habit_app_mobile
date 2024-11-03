@@ -1,18 +1,26 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 
 interface CustomDropdownProps {
   title: string;
   data: string[];
   onSelectValue: (value: string) => void;
+  defaultValue?: string;
 }
 
 const CustomDropdown = ({
   data,
   title,
   onSelectValue,
+  defaultValue,
 }: CustomDropdownProps) => {
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedValue(defaultValue); // Set selected value to defaultValue if provided
+    }
+  }, [defaultValue]); // Re-run if defaultValue changes
+
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 

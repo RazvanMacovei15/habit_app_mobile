@@ -20,10 +20,6 @@ export default function App() {
     <SafeAreaView>
       <ScrollView contentContainerStyle={{ height: "100%" }}>
         <View className="w-full items-center px-4 h-full justify-center">
-          {/* <CustomButon
-            title="SIGN IN"
-            handlePress={() => router.push("/sign-in")}
-          /> */}
           {!authState?.authenticated ? (
             <CustomButon
               title="SIGN IN"

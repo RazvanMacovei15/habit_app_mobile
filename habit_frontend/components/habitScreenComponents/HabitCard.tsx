@@ -20,7 +20,7 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
   const toggleCompleted = async (id: number) => {
     try {
       const response = await axios.patch(
-        `http://maco-coding.go.ro:8010/habits/${id}/update`,
+        `http://maco-coding.go.ro:8020/habits/${id}/update`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -77,12 +77,22 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
       </TouchableOpacity>
       {isSelected && (
         <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
-          <Text className="text-gray-800 text-xl">
-            Habit {habitData.id} is{" "}
-            {habitData.completed ? "completed" : "not completed"}
+          <Text className="text-gray-800 text-sm">
+            Date created: {habitData.dateCreated}
             {"\n"}
+            Date updated: {habitData.lastUpdated}
             {"\n"}
-            your current streak is: {habitData.currentStreak}
+            Description: {habitData.description}
+            {"\n"}
+            Type: {habitData.type}
+            {"\n"}
+            Occurrence: {habitData.occurrence}
+            {"\n"}
+            Current streak: {habitData.currentStreak}
+            {"\n"}
+            Longest streak: {habitData.bestStreak}
+            {"\n"}
+            Total completions: {habitData.totalCount}
           </Text>
         </View>
       )}
@@ -91,15 +101,3 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
 };
 
 export default HabitCard;
-
-function setLoading(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
-
-function setError(arg0: null) {
-  throw new Error("Function not implemented.");
-}
-
-function setData(data: any) {
-  throw new Error("Function not implemented.");
-}

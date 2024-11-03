@@ -8,7 +8,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { icons } from "../../constants";
+import { icons } from "../../../constants";
 
 const TopNav = () => {
   return (

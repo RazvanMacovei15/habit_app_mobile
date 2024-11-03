@@ -50,9 +50,6 @@ export const AuthProvider = ({ children }: any) => {
           token,
           authenticated: true,
         });
-
-        console.log(token); // Log token for debugging
-
         // Set the token in axios headers for all future requests
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       }

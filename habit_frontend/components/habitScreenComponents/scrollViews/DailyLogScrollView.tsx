@@ -1,16 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View, Text } from "react-native";
-import HabitCard from "./HabitCard";
+import HabitCard from "../HabitCard";
 import { useAuth } from "@/app/context/AuthContext";
-import { HabitDTO } from "../../components/types/HabitDTO";
-import DailyLogCard from "./logCards/DailyLogCard";
-import { DailyLogDTO } from "../types/DailyLogDTO";
+import { HabitDTO } from "../../types/HabitDTO";
+import DailyLogCard from "../logCards/DailyLogCard";
+import { DailyLogDTO } from "../../types/DailyLogDTO";
 
-interface HabitsScrollView {
-  // selectedHabit: HabitDTO | null;
-  // onSelect: (habit: HabitDTO | null) => void;
-  // data: HabitDTO[];
+interface DailyLogScrollViewProps {
   selectedHabit: DailyLogDTO | null;
   onSelect: (habit: DailyLogDTO | null) => void;
   data: DailyLogDTO[];
@@ -18,13 +15,13 @@ interface HabitsScrollView {
   loading: boolean;
 }
 
-const HabitsScrollView = ({
+const DailyLogScrollView = ({
   selectedHabit,
   onSelect,
   data,
   error,
   loading,
-}: HabitsScrollView) => {
+}: DailyLogScrollViewProps) => {
   if (loading) {
     return (
       <View className="grow items-center justify-center">
@@ -39,18 +36,6 @@ const HabitsScrollView = ({
   }
   return (
     <ScrollView className="h-1/2 px-2 bg-gray-100 mt-2">
-      {/* <View className=" gap-2 justify-start flex-col">
-        {data.map((habit) => (
-          <HabitCard
-            key={habit.id}
-            habit={habit}
-            isSelected={selectedHabit === habit}
-            onSelect={() => {
-              onSelect(selectedHabit === habit ? null : habit);
-            }}
-          />
-        ))}
-      </View> */}
       <View className=" gap-2 justify-start flex-col">
         {data.map((dailyLogDTO) => (
           <DailyLogCard
@@ -67,4 +52,4 @@ const HabitsScrollView = ({
   );
 };
 
-export default HabitsScrollView;
+export default DailyLogScrollView;

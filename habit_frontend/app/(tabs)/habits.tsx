@@ -1,13 +1,11 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import TopNav from "@/components/navigation/TopNavigation/topNav";
-
 import DeleteCustomButton from "@/components/habitScreenComponents/crudButtons/DeleteCustomButton";
 import PlusCustomButton from "@/components/habitScreenComponents/crudButtons/PlusCustomButton";
 import EditCustomButton from "@/components/habitScreenComponents/crudButtons/EditCustomButton";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import HabitsScrollView from "../../components/habitScreenComponents/HabitsScrollView";
 import AddHabitModal from "@/components/modals/AddHabitModal";
 import EditHabitModal from "@/components/modals/EditHabitModal";
 import OccurrenceNavigator from "@/components/navigation/OccurrenceNavigator";
@@ -15,6 +13,7 @@ import { HabitForm } from "../../components/types/HabitForm";
 import { HabitDTO } from "../../components/types/HabitDTO";
 import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
+import DailyLogScrollView from "@/components/habitScreenComponents/scrollViews/DailyLogScrollView";
 
 const Habits = () => {
   const { authState } = useAuth();
@@ -238,7 +237,7 @@ const Habits = () => {
           handleCreateHabit={handleCreateHabit}
           setHabitForm={setHabitForm}
         />
-        <HabitsScrollView
+        <DailyLogScrollView
           loading={false}
           error={error}
           data={dailyLogData}

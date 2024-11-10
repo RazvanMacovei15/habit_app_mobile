@@ -80,7 +80,7 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
           <Text className="text-gray-800 text-sm">
             Date created: {habitData.dateCreated}
             {"\n"}
-            Date updated: {habitData.dateUpdated}
+            Date updated: {habitData.lastUpdated}
             {"\n"}
             Description: {habitData.description}
             {"\n"}

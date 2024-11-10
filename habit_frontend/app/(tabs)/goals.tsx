@@ -5,7 +5,11 @@ import TopNav from "@/components/navigation/TopNavigation/topNav";
 const Goals = () => {
   return (
     <View>
-      <TopNav />
+      <TopNav
+        onPress={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
       <Text>Goals</Text>
     </View>
   );

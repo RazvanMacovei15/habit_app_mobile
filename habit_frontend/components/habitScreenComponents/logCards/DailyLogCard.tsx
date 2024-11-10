@@ -77,7 +77,7 @@ const DailyLogCard = ({
           <Text className="text-gray-800 text-sm">
             Date created: {dailyLogData.habitDTO.dateCreated}
             {"\n"}
-            Date updated: {dailyLogData.habitDTO.dateUpdated}
+            Date updated: {dailyLogData.habitDTO.lastUpdated}
             {"\n"}
             Description: {dailyLogData.habitDTO.description}
             {"\n"}

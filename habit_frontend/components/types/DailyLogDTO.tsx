@@ -2,7 +2,7 @@ import { HabitDTO } from "./HabitDTO";
 
 export interface DailyLogDTO {
   id: number;
-  date: string;
+  date: Date;
   habitDTO: HabitDTO;
   completed: boolean;
   isPreviousDayCompleted: boolean;

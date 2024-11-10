@@ -15,6 +15,7 @@ import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
 import DailyLogScrollView from "@/components/habitScreenComponents/scrollViews/DailyLogScrollView";
 import DayByDayNavigation from "@/components/navigation/DayByDayNavigation";
+import { format } from "date-fns";
 
 const Habits = () => {
   const { authState } = useAuth();
@@ -22,7 +23,7 @@ const Habits = () => {
   const [error, setError] = useState(null);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  console.log({ selectedDate });
+  const selectedDateFormatted = format(selectedDate, "yyyy-MM-dd");
 
   const initialHabitFormState = {
     habitName: "",
@@ -48,6 +49,19 @@ const Habits = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const fetchDailyLogsByDate = async (selectedDateFormatted: string) => {
+    setError(null);
+    try {
+      const response = await axios.get(
+        `http://maco-coding.go.ro:8020/daily-logs/date/${selectedDateFormatted}`
+      );
+      setDailyLogData(response.data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+    }
+  };
 
   const fetchData = async (endpoint: string, token: string) => {
     setError(null);
@@ -224,7 +238,14 @@ const Habits = () => {
           selectedOccurrence={selectedOccurrence}
           setSelectedOccurrence={setSelectedOccurrence}
         />
-        <DayByDayNavigation onPress={setSelectedDate} />
+        <DayByDayNavigation
+          selectedDate={selectedDate}
+          onPress={(newDate) => {
+            setSelectedDate(newDate);
+          }}
+          onLeftPress={() => fetchDailyLogsByDate(selectedDateFormatted)}
+          onRightPress={() => fetchDailyLogsByDate(selectedDateFormatted)}
+        />
         <EditHabitModal
           modalVisible={editModalVisible}
           setModalVisible={setEditModalVisible}

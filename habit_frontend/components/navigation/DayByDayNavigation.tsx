@@ -5,29 +5,45 @@ import {
   Image,
   ImageSourcePropType,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import icons from "@/constants/icons";
 
 interface DayByDayNavigationProps {
+  selectedDate: Date;
   onPress: (date: Date) => void;
+  onLeftPress: (date: Date) => void;
+  onRightPress: (date: Date) => void;
 }
 
-const DayByDayNavigation = ({ onPress }: DayByDayNavigationProps) => {
-  const [currentDay, setCurrentDay] = useState(new Date());
+const DayByDayNavigation = ({
+  onPress,
+  onLeftPress,
+  onRightPress,
+  selectedDate,
+}: DayByDayNavigationProps) => {
+  const [currentDay, setCurrentDay] = useState(selectedDate);
 
-  // Function to move one day back
+  // Move one day back
   const handleLeftPress = () => {
-    setCurrentDay(
-      (prevDate) => new Date(prevDate.setDate(prevDate.getDate() - 1))
-    );
+    setCurrentDay((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() - 1);
+      onPress(newDate); // Call onPress with the updated date
+      onLeftPress(newDate); // Call onLeftPress with the updated date
+      return newDate;
+    });
   };
 
-  // Function to move one day forward
+  // Move one day forward
   const handleRightPress = () => {
-    setCurrentDay(
-      (prevDate) => new Date(prevDate.setDate(prevDate.getDate() + 1))
-    );
+    setCurrentDay((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() + 1);
+      onPress(newDate); // Call onPress with the updated date
+      onRightPress(newDate); // Call onRightPress with the updated date
+      return newDate;
+    });
   };
   return (
     <View className="flex flex-row justify-around h-16 items-center">

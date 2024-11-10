@@ -7,7 +7,6 @@ import {
   Text,
   ImageSourcePropType,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { icons } from "../../../constants";
 
 interface TopNavProps {

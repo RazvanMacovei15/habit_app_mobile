@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import TopNav from "@/components/navigation/TopNavigation/topNav";
+import TopNav from "@/components/navigation/TopNavigation/TopNav";
 import DeleteCustomButton from "@/components/habitScreenComponents/crudButtons/DeleteCustomButton";
 import PlusCustomButton from "@/components/habitScreenComponents/crudButtons/PlusCustomButton";
 import EditCustomButton from "@/components/habitScreenComponents/crudButtons/EditCustomButton";
@@ -14,11 +14,15 @@ import { HabitDTO } from "../../components/types/HabitDTO";
 import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
 import DailyLogScrollView from "@/components/habitScreenComponents/scrollViews/DailyLogScrollView";
+import DayByDayNavigation from "@/components/navigation/DayByDayNavigation";
 
 const Habits = () => {
   const { authState } = useAuth();
   const token = authState?.token;
   const [error, setError] = useState(null);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  console.log({ selectedDate });
 
   const initialHabitFormState = {
     habitName: "",
@@ -26,11 +30,12 @@ const Habits = () => {
     occurrence: "",
     description: "",
   };
-  const [habitForm, setHabitForm] = useState(initialHabitFormState);
 
+  const [habitForm, setHabitForm] = useState(initialHabitFormState);
   const [selectedOccurrence, setSelectedOccurrence] = useState("DAILY");
+
   const [selectedHabit, setSelectedHabit] = useState<HabitDTO | null>(null);
-  const isSelected = selectedHabit !== null; // Check if a habit is selected
+  const isSelected = selectedHabit !== null;
 
   const [selectedDailyLog, setSelectedDailyLog] = useState<DailyLogDTO | null>(
     null
@@ -54,7 +59,7 @@ const Habits = () => {
     } finally {
     }
   };
-  const retrieveDailyLogData = async (endpoint: string, token: string) => {
+  const retrieveDailyLogData = async (endpoint: string) => {
     setError(null);
     try {
       const response = await axios.get(endpoint);
@@ -133,6 +138,7 @@ const Habits = () => {
   };
   const handleUpdateHabit = () => {
     if (token) {
+      console.log(habitForm);
       update(
         `http://maco-coding.go.ro:8020/habits/${selectedHabit?.id}/updateDetails`,
         token,
@@ -149,10 +155,7 @@ const Habits = () => {
   };
   const loadDailyLogs = async () => {
     if (token) {
-      retrieveDailyLogData(
-        "http://maco-coding.go.ro:8020/daily-logs/getAll",
-        token
-      );
+      retrieveDailyLogData("http://maco-coding.go.ro:8020/daily-logs/getAll");
     } else {
       console.error("Token is not available");
     }
@@ -172,6 +175,7 @@ const Habits = () => {
       fetchDataByOccurrence(token, selectedOccurrence);
       loadDailyLogs();
       loadWeeklyLogs();
+      console.log({ selectedDate });
     }
   }, [selectedOccurrence]);
   const fetchDataByOccurrence = async (token: string, occurrence: string) => {
@@ -220,9 +224,7 @@ const Habits = () => {
           selectedOccurrence={selectedOccurrence}
           setSelectedOccurrence={setSelectedOccurrence}
         />
-        <Text className="h-10 text-center align-middle">
-          {"<---            "} Day by day navigation here {"             --->"}
-        </Text>
+        <DayByDayNavigation onPress={setSelectedDate} />
         <EditHabitModal
           modalVisible={editModalVisible}
           setModalVisible={setEditModalVisible}
@@ -247,10 +249,10 @@ const Habits = () => {
       </View>
       <View className="h-20 items-center justify-around flex-row bg-gray-100 border-red-300 rounded-t-3xl shadow-2xl shadow-slate-900">
         <EditCustomButton
-          isDisabled={!isSelected}
+          isDisabled={!isDailyLogSelected}
           onPress={() => {
             setEditModalVisible(true);
-            handleSelectHabit(selectedHabit);
+            handleSelectDailyLogDTO(selectedDailyLog);
           }}
         />
         <PlusCustomButton
@@ -260,7 +262,7 @@ const Habits = () => {
           }}
         />
         <DeleteCustomButton
-          isDisabled={!isSelected}
+          isDisabled={!isDailyLogSelected}
           selectedHabit={selectedHabit}
           onPress={() => {
             console.log("Delete button pressed");

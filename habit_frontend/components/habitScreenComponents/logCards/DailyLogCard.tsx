@@ -53,7 +53,7 @@ const DailyLogCard = ({
         <View>
           <BouncyCheckBox
             size={35}
-            isChecked={dailyLogDTO.isCompleted}
+            isChecked={dailyLogDTO.completed}
             fillColor="red"
             unFillColor="#FFFFFF"
             disableText={true}
@@ -90,6 +90,10 @@ const DailyLogCard = ({
             Longest streak: {dailyLogData.habitDTO.bestStreak}
             {"\n"}
             Total completions: {dailyLogData.habitDTO.totalCount}
+            {"\n"}
+            Completed: {dailyLogData.completed ? "Yes" : "No"}
+            {"\n"}
+            Log id: {dailyLogData.id}
           </Text>
         </View>
       )}

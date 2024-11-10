@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import TopNav from "@/components/navigation/TopNavigation/topNav";
+import TopNav from "@/components/navigation/TopNavigation/TopNav";
 
 const Goals = () => {
   return (

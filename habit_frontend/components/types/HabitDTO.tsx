@@ -10,5 +10,5 @@ export interface HabitDTO {
   totalCount: number;
   targetCount: number;
   dateCreated: string;
-  dateUpdated: string;
+  lastUpdated: string;
 }

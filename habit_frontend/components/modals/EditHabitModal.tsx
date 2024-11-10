@@ -6,7 +6,7 @@ import CustomDropdown from "../CustomDropdown";
 import AddDescriptionFormField from "../habitScreenComponents/AddDescriptionFormField";
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
-import { HabitForm } from "@/app/(tabs)/habits";
+import { HabitForm } from "@/components/types/HabitForm";
 
 interface AddHabitModalProps {
   modalVisible: boolean;

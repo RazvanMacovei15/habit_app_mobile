@@ -6,24 +6,21 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import React from "react";
-import { icons } from "../../constants";
-import { Habit } from "@/app/(tabs)/habits";
+import { icons } from "../../../constants";
 
-interface DeleteCustomButtonProps {
+interface EditCustomButtonProps {
   isDisabled?: boolean;
-  selectedHabit: Habit | null;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
-const DeleteCustomButon = ({
+const EditCustomButton = ({
   isDisabled = true,
-  selectedHabit,
   onPress,
-}: DeleteCustomButtonProps) => {
+}: EditCustomButtonProps) => {
   return (
     <TouchableOpacity disabled={isDisabled} onPress={onPress}>
       <Image
-        source={icons.deletePNG as ImageSourcePropType}
+        source={icons.edit as ImageSourcePropType}
         className={`w-10 h-10 ${isDisabled ? "opacity-30" : ""}`}
         tintColor={"black"}
       />
@@ -31,4 +28,4 @@ const DeleteCustomButon = ({
   );
 };
 
-export default DeleteCustomButon;
+export default EditCustomButton;

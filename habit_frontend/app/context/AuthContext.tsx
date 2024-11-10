@@ -2,10 +2,14 @@
 import * as SecureStorage from "expo-secure-store"; // Secure storage for storing sensitive information
 import axios from "axios"; // HTTP client for making API requests
 import { createContext, useContext, useEffect, useState } from "react"; // React hooks and context for state management
+import { router } from "expo-router";
 
 // Define the shape of the authentication properties that will be available in the context
 interface AuthProps {
-  authState?: { token: string | null; authenticated: boolean | null }; // Token and authentication state
+  authState?: {
+    token: string | null;
+    authenticated: boolean | null;
+  }; // Token and authentication state
   onRegister?: (
     // Function for registering a new user
     username: string,
@@ -138,6 +142,8 @@ export const AuthProvider = ({ children }: any) => {
       token: null,
       authenticated: false,
     });
+
+    router.push("/sign-in");
   };
 
   // Define the values that will be provided by the authentication context

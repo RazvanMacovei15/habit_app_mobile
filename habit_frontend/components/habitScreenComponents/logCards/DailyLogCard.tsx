@@ -3,32 +3,29 @@ import React, { useState } from "react";
 import axios from "axios";
 import BouncyCheckBox from "react-native-bouncy-checkbox";
 import { useAuth } from "@/app/context/AuthContext";
-import { HabitDTO } from "../../components/types/HabitDTO";
+import { HabitDTO } from "../../../components/types/HabitDTO";
+import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 
-interface HabitCard {
-  habit: HabitDTO;
+interface DailyLogCardProps {
+  dailyLogDTO: DailyLogDTO;
   isSelected: boolean;
   onSelect: () => void;
 }
 
-const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
-  const [habitData, setHabitData] = useState<HabitDTO>(habit);
-
-  const { authState } = useAuth();
-  const token = authState?.token;
+const DailyLogCard = ({
+  dailyLogDTO,
+  isSelected,
+  onSelect,
+}: DailyLogCardProps) => {
+  const [dailyLogData, setDailyLogData] = useState<DailyLogDTO>(dailyLogDTO);
 
   const toggleCompleted = async (id: number) => {
     try {
       const response = await axios.patch(
-        `http://maco-coding.go.ro:8020/habits/${id}/update`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `http://maco-coding.go.ro:8020/daily-logs/${id}/update`
       );
-      setHabitData(response.data);
-      console.log(habitData);
+      setDailyLogData(response.data);
+      console.log(dailyLogData);
     } catch (err: any) {
       console.log(err.message);
     }
@@ -51,12 +48,12 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
         }
       >
         <Text className="text-start text-2xl text-black w-5/6">
-          {habit.habitName}
+          {dailyLogDTO.habitDTO.habitName}
         </Text>
         <View>
           <BouncyCheckBox
             size={35}
-            isChecked={true}
+            isChecked={dailyLogDTO.isCompleted}
             fillColor="red"
             unFillColor="#FFFFFF"
             disableText={true}
@@ -70,7 +67,7 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
               fontFamily: "JosefinSans-Regular",
             }}
             onPress={() => {
-              toggleCompleted(habitData.id);
+              toggleCompleted(dailyLogData.id);
             }}
           ></BouncyCheckBox>
         </View>
@@ -78,21 +75,21 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
       {isSelected && (
         <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
           <Text className="text-gray-800 text-sm">
-            Date created: {habitData.dateCreated}
+            Date created: {dailyLogData.habitDTO.dateCreated}
             {"\n"}
-            Date updated: {habitData.dateUpdated}
+            Date updated: {dailyLogData.habitDTO.dateUpdated}
             {"\n"}
-            Description: {habitData.description}
+            Description: {dailyLogData.habitDTO.description}
             {"\n"}
-            Type: {habitData.type}
+            Type: {dailyLogData.habitDTO.type}
             {"\n"}
-            Occurrence: {habitData.occurrence}
+            Occurrence: {dailyLogData.habitDTO.occurrence}
             {"\n"}
-            Current streak: {habitData.currentStreak}
+            Current streak: {dailyLogData.habitDTO.currentStreak}
             {"\n"}
-            Longest streak: {habitData.bestStreak}
+            Longest streak: {dailyLogData.habitDTO.bestStreak}
             {"\n"}
-            Total completions: {habitData.totalCount}
+            Total completions: {dailyLogData.habitDTO.totalCount}
           </Text>
         </View>
       )}
@@ -100,4 +97,4 @@ const HabitCard = ({ habit, isSelected, onSelect }: HabitCard) => {
   );
 };
 
-export default HabitCard;
+export default DailyLogCard;

@@ -10,7 +10,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { icons } from "../../../constants";
 
-const TopNav = () => {
+interface TopNavProps {
+  onPress: () => void;
+}
+
+const TopNav = ({ onPress }: TopNavProps) => {
   return (
     <View className="flex-row justify-around mt-12 pb-4 rounded-b-3xl">
       <TouchableOpacity className="justify-center items-center w-1/4">
@@ -25,7 +29,10 @@ const TopNav = () => {
           That which you don't track{"\n"} You can't improve
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity className="items-center justify-center w-1/4">
+      <TouchableOpacity
+        className="items-center justify-center w-1/4"
+        onPress={onPress}
+      >
         <Image
           source={icons.notification as ImageSourcePropType}
           className="h-8 w-8"

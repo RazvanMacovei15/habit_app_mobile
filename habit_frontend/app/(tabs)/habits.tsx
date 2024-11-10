@@ -2,79 +2,83 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import TopNav from "@/components/navigation/TopNavigation/topNav";
 
-import DeleteCustomButton from "@/components/habitScreenComponents/DeleteCustomButton";
-import PlusCustomButton from "@/components/habitScreenComponents/PlusCustomButton";
-import EditCustomButton from "@/components/habitScreenComponents/EditCustomButton";
+import DeleteCustomButton from "@/components/habitScreenComponents/crudButtons/DeleteCustomButton";
+import PlusCustomButton from "@/components/habitScreenComponents/crudButtons/PlusCustomButton";
+import EditCustomButton from "@/components/habitScreenComponents/crudButtons/EditCustomButton";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import HabitsScrollView from "../../components/habitScreenComponents/HabitsScrollView";
 import AddHabitModal from "@/components/modals/AddHabitModal";
 import EditHabitModal from "@/components/modals/EditHabitModal";
 import OccurrenceNavigator from "@/components/navigation/OccurrenceNavigator";
-
-export type Habit = {
-  id: number;
-  habitName: string;
-  type: string;
-  occurrence: string;
-  description: string;
-  currentStreak: number;
-  bestStreak: number;
-  totalCount: number;
-  dateCreated: string;
-  lastUpdated: string;
-  completed: boolean;
-};
-
-export type HabitForm = {
-  habitName: string;
-  type: string;
-  occurrence: string;
-  description: string;
-};
+import { HabitForm } from "../../components/types/HabitForm";
+import { HabitDTO } from "../../components/types/HabitDTO";
+import { DailyLogDTO } from "@/components/types/DailyLogDTO";
+import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
 
 const Habits = () => {
-  const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
-
-  const isSelected = selectedHabit !== null;
-
-  const [data, setData] = useState<Habit[]>([]);
-
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   const { authState } = useAuth();
   const token = authState?.token;
+  const [error, setError] = useState(null);
+
+  const initialHabitFormState = {
+    habitName: "",
+    type: "",
+    occurrence: "",
+    description: "",
+  };
+  const [habitForm, setHabitForm] = useState(initialHabitFormState);
+
+  const [selectedOccurrence, setSelectedOccurrence] = useState("DAILY");
+  const [selectedHabit, setSelectedHabit] = useState<HabitDTO | null>(null);
+  const isSelected = selectedHabit !== null; // Check if a habit is selected
+
+  const [selectedDailyLog, setSelectedDailyLog] = useState<DailyLogDTO | null>(
+    null
+  );
+  const isDailyLogSelected = selectedDailyLog !== null; // Check if a daily log is selected
+
+  const [data, setData] = useState<HabitDTO[]>([]);
+  const [dailyLogData, setDailyLogData] = useState<DailyLogDTO[]>([]);
+  const [weeklyLogData, setWeeklyLogData] = useState<WeeklyLogDTO[]>([]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
 
-  const [selectedOccurrence, setSelectedOccurrence] = useState("DAILY");
-
   const fetchData = async (endpoint: string, token: string) => {
     setError(null);
     try {
-      const response = await axios.get(endpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(endpoint);
       setData(response.data);
-      console.log("Data: ", response.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
     }
   };
-
+  const retrieveDailyLogData = async (endpoint: string, token: string) => {
+    setError(null);
+    try {
+      const response = await axios.get(endpoint);
+      setDailyLogData(response.data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+    }
+  };
+  const retrieveWeeklyLogData = async (endpoint: string, token: string) => {
+    setError(null);
+    try {
+      const response = await axios.get(endpoint);
+      setWeeklyLogData(response.data);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+    }
+  };
   const deleteData = async (endpoint: string, token: string) => {
     setError(null);
     try {
-      const response = await axios.delete(endpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.delete(endpoint);
       const newData = data.filter((habit) => habit.id !== selectedHabit?.id);
       setData(newData);
     } catch (err: any) {
@@ -82,7 +86,6 @@ const Habits = () => {
     } finally {
     }
   };
-
   const createHabit = async (
     endpoint: string,
     token: string,
@@ -90,11 +93,7 @@ const Habits = () => {
   ) => {
     setError(null);
     try {
-      const response = await axios.post(endpoint, habitForm, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(endpoint, habitForm);
       const newData = data.filter((habit) => habit.id !== selectedHabit?.id);
       setData(newData);
     } catch (err: any) {
@@ -109,11 +108,7 @@ const Habits = () => {
   ) => {
     setError(null);
     try {
-      const response = await axios.patch(endpoint, habitForm, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.patch(endpoint, habitForm);
       const newData = data.filter((habit) => habit.id !== selectedHabit?.id);
       setData(newData);
     } catch (err: any) {
@@ -121,8 +116,6 @@ const Habits = () => {
     } finally {
     }
   };
-
-  // Example call to createHabit function with endpoint, token, and habitForm
   const handleCreateHabit = () => {
     if (token) {
       createHabit(
@@ -139,7 +132,6 @@ const Habits = () => {
       console.error("Token is not available");
     }
   };
-
   const handleUpdateHabit = () => {
     if (token) {
       update(
@@ -156,14 +148,33 @@ const Habits = () => {
       console.error("Token is not available");
     }
   };
-
+  const loadDailyLogs = async () => {
+    if (token) {
+      retrieveDailyLogData(
+        "http://maco-coding.go.ro:8020/daily-logs/getAll",
+        token
+      );
+    } else {
+      console.error("Token is not available");
+    }
+  };
+  const loadWeeklyLogs = async () => {
+    if (token) {
+      retrieveWeeklyLogData(
+        "http://maco-coding.go.ro:8020/weekly-logs/getAll",
+        token
+      );
+    } else {
+      console.error("Token is not available");
+    }
+  };
   useEffect(() => {
     if (token) {
-      // fetchData("http://maco-coding.go.ro:8020/habits/all", token);
       fetchDataByOccurrence(token, selectedOccurrence);
+      loadDailyLogs();
+      loadWeeklyLogs();
     }
   }, [selectedOccurrence]);
-
   const fetchDataByOccurrence = async (token: string, occurrence: string) => {
     if (token) {
       fetchData(
@@ -172,17 +183,7 @@ const Habits = () => {
       );
     }
   };
-
-  const initialHabitFormState = {
-    habitName: "",
-    type: "",
-    occurrence: "",
-    description: "",
-  };
-
-  const [habitForm, setHabitForm] = useState(initialHabitFormState);
-
-  const handleSelectHabit = (habit: Habit | null) => {
+  const handleSelectHabit = (habit: HabitDTO | null) => {
     setSelectedHabit(habit);
     if (habit) {
       // Update habitForm with the selected habit's attributes
@@ -197,10 +198,24 @@ const Habits = () => {
       setHabitForm(initialHabitFormState);
     }
   };
-
+  const handleSelectDailyLogDTO = (dailyLogDTO: DailyLogDTO | null) => {
+    setSelectedDailyLog(dailyLogDTO);
+    if (dailyLogDTO) {
+      // Update habitForm with the selected habit's attributes
+      setHabitForm({
+        habitName: dailyLogDTO.habitDTO.habitName,
+        type: dailyLogDTO.habitDTO.type,
+        occurrence: dailyLogDTO.habitDTO.occurrence,
+        description: dailyLogDTO.habitDTO.description,
+      });
+    } else {
+      // Reset habitForm to the initial state if no habit is selected
+      setHabitForm(initialHabitFormState);
+    }
+  };
   return (
     <View className="flex flex-col justify-strech h-full">
-      <TopNav />
+      <TopNav onPress={loadDailyLogs} />
       <View className=" flex-col flex grow bg-gray-100">
         <OccurrenceNavigator
           selectedOccurrence={selectedOccurrence}
@@ -226,9 +241,9 @@ const Habits = () => {
         <HabitsScrollView
           loading={false}
           error={error}
-          data={data}
-          selectedHabit={selectedHabit}
-          onSelect={handleSelectHabit}
+          data={dailyLogData}
+          selectedHabit={selectedDailyLog}
+          onSelect={handleSelectDailyLogDTO}
         />
       </View>
       <View className="h-20 items-center justify-around flex-row bg-gray-100 border-red-300 rounded-t-3xl shadow-2xl shadow-slate-900">

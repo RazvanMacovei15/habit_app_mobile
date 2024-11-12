@@ -11,14 +11,7 @@ const OccurrenceNavigator = ({
   setSelectedOccurrence,
 }: OccurrenceNavigatorProps) => {
   const handlePress = (occurrence: string) => {
-    if (occurrence === "WEEKLY" || occurrence === "MONTHLY") {
-      Alert.alert(
-        "Under Construction",
-        `${occurrence} option is under construction.`
-      );
-    } else {
-      setSelectedOccurrence(occurrence);
-    }
+    setSelectedOccurrence(occurrence);
   };
   const getButtonClasses = (occurrence: string) =>
     selectedOccurrence === occurrence

@@ -5,11 +5,12 @@ import HabitCard from "../HabitCard";
 import { useAuth } from "@/app/context/AuthContext";
 import { HabitDTO } from "../../types/HabitDTO";
 import SingleTargetCard from "../logCards/SingleTargetCard";
-import { DailyLogDTO } from "../../types/DailyLogDTO";
+import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
 import MultiTargetCard from "../logCards/MultiTargetCard";
+import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 import { LogData } from "../../../app/(tabs)/habits";
 
-interface DailyLogScrollViewProps {
+interface WeeklyLogScrollViewProps {
   selectedLog: LogData | null;
   onSelect: (log: LogData | null) => void;
   data: LogData[];
@@ -17,13 +18,13 @@ interface DailyLogScrollViewProps {
   loading: boolean;
 }
 
-const DailyLogScrollView = ({
+const WeeklyLogScrollView = ({
   selectedLog,
   onSelect,
   data,
   error,
   loading,
-}: DailyLogScrollViewProps) => {
+}: WeeklyLogScrollViewProps) => {
   if (loading) {
     return (
       <View className="grow items-center justify-center">
@@ -65,4 +66,4 @@ const DailyLogScrollView = ({
   );
 };
 
-export default DailyLogScrollView;
+export default WeeklyLogScrollView;

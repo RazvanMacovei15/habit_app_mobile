@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { icons } from "../../../constants";
-import { HabitDTO } from "@/app/(tabs)/habits";
+import { HabitDTO } from "../../types/HabitDTO";
 
 interface DeleteCustomButtonProps {
   isDisabled?: boolean;

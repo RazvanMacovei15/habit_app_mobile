@@ -7,7 +7,7 @@ import {
   Text,
   ImageSourcePropType,
 } from "react-native";
-import { icons } from "../../../constants";
+import { icons } from "../../constants";
 
 interface TopNavProps {
   onPress: () => void;

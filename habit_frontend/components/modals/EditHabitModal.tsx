@@ -1,9 +1,9 @@
 import { View, Text, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Modal from "react-native-modal";
-import AddHabitFormField from "../habitScreenComponents/AddHabitFormField";
+import AddHabitFormField from "../habitScreenComponents/formFields/AddHabitFormField";
 import CustomDropdown from "../CustomDropdown";
-import AddDescriptionFormField from "../habitScreenComponents/AddDescriptionFormField";
+import AddDescriptionFormField from "../habitScreenComponents/formFields/AddDescriptionFormField";
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
 import { HabitForm } from "@/components/types/HabitForm";

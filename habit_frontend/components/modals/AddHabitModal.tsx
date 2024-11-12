@@ -1,12 +1,13 @@
 import { View, Text, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Modal from "react-native-modal";
-import AddHabitFormField from "../habitScreenComponents/AddHabitFormField";
+import AddHabitFormField from "../habitScreenComponents/formFields/AddHabitFormField";
 import CustomDropdown from "../CustomDropdown";
-import AddDescriptionFormField from "../habitScreenComponents/AddDescriptionFormField";
+import AddDescriptionFormField from "../habitScreenComponents/formFields/AddDescriptionFormField";
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
-import { HabitForm } from "@/app/(tabs)/habits";
+import { HabitForm } from "../types/HabitForm";
+import AddTargetNumberFormField from "../habitScreenComponents/formFields/AddTargetNumberFormFields";
 
 interface AddHabitModalProps {
   modalVisible: boolean;
@@ -93,31 +94,44 @@ const AddHabitModal = ({
             }
             placeholder={"Name of the habit"}
           />
-
-          <CustomDropdown
-            data={types}
-            title="type:"
-            onSelectValue={(e: string) =>
+          <View className="flex flex-row">
+            <CustomDropdown
+              data={types}
+              title="type:"
+              onSelectValue={(e: string) =>
+                setHabitForm({
+                  ...habitForm,
+                  type: e,
+                })
+              }
+            />
+            <CustomDropdown
+              data={occurrences}
+              title="occurrence:"
+              onSelectValue={(e: string) => {
+                setHabitForm({
+                  ...habitForm,
+                  occurrence: e,
+                });
+              }}
+            />
+          </View>
+          <AddTargetNumberFormField
+            title={"TargetCount"}
+            value={habitForm.targetCount}
+            handleChangeText={(e: string) => {
               setHabitForm({
                 ...habitForm,
-                type: e,
-              })
-            }
-          />
-          <CustomDropdown
-            data={occurrences}
-            title="occurrence:"
-            onSelectValue={(e: string) => {
-              setHabitForm({
-                ...habitForm,
-                occurrence: e,
+                targetCount: e,
               });
             }}
+            placeholder={"Habit target count..."}
           />
+
           <AddDescriptionFormField
             title={"Description"}
             value={habitForm.description}
-            handleChangeText={(e) => {
+            handleChangeText={(e: string) => {
               setHabitForm({
                 ...habitForm,
                 description: e,

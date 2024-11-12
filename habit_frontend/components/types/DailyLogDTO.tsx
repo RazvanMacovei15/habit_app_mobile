@@ -5,5 +5,6 @@ export interface DailyLogDTO {
   date: Date;
   habitDTO: HabitDTO;
   completed: boolean;
-  isPreviousDayCompleted: boolean;
+  currentCount: number;
+  previousCompleted: boolean;
 }

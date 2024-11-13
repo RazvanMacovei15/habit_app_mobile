@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, ScrollView, View, Text } from "react-native";
-import HabitCard from "../HabitCard";
 import { useAuth } from "@/app/context/AuthContext";
 import { HabitDTO } from "../../types/HabitDTO";
 import SingleTargetCard from "../logCards/SingleTargetCard";
@@ -10,6 +9,7 @@ import MultiTargetCard from "../logCards/MultiTargetCard";
 import { LogData } from "../../../app/(tabs)/habits";
 
 interface DailyLogScrollViewProps {
+  fetchLogs: () => void;
   selectedLog: LogData | null;
   onSelect: (log: LogData | null) => void;
   data: LogData[];
@@ -18,6 +18,7 @@ interface DailyLogScrollViewProps {
 }
 
 const DailyLogScrollView = ({
+  fetchLogs,
   selectedLog,
   onSelect,
   data,
@@ -42,6 +43,7 @@ const DailyLogScrollView = ({
         {data.map((log) =>
           log.habitDTO.targetCount > 1 ? (
             <MultiTargetCard
+              fetchLogs={fetchLogs}
               key={log.id}
               isSelected={selectedLog === log}
               onSelect={() => {
@@ -51,6 +53,7 @@ const DailyLogScrollView = ({
             />
           ) : (
             <SingleTargetCard
+              fetchLogs={fetchLogs}
               key={log.id}
               logData={log}
               isSelected={selectedLog === log}

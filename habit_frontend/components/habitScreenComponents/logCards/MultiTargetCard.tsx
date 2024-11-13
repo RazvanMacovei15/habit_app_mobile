@@ -1,29 +1,59 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
-import React, { useState } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
 import { LogData } from "@/app/(tabs)/habits";
+import axios from "axios";
 
 interface MultiTargetCardProps {
   logData: LogData;
   isSelected: boolean;
   onSelect: () => void;
+  fetchLogs: () => void;
 }
 
 const MultiTargetCard = ({
   logData,
   isSelected,
   onSelect,
+  fetchLogs,
 }: MultiTargetCardProps) => {
   const [selectedLogData, setSelectedLogData] = useState<LogData>(logData);
 
-  const toggleCompleted = async (id: number) => {
+  const addUpdate = async (id: number) => {
     try {
-      //TODO : method when weekly log is completed
+      const url =
+        "yearWeek" in logData
+          ? `http://maco-coding.go.ro:8020/weekly-logs/${id}/addUpdate`
+          : `http://maco-coding.go.ro:8020/daily-logs/${id}/addUpdate`;
+      const response = await axios.patch(url);
+      setSelectedLogData(response.data);
+      fetchLogs();
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
+
+  const fetchLogData = async () => {
+    try {
+      const url =
+        "yearWeek" in logData
+          ? `http://maco-coding.go.ro:8020/weekly-logs/yearWeek/${logData.yearWeek}/habit/${logData.habitDTO.id}`
+          : `http://maco-coding.go.ro:8020/daily-logs/${logData.id}`;
+      const response = await axios.get(url);
+      setSelectedLogData(response.data);
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
+
+  const decrementUpdate = async (id: number) => {
+    try {
+      const url =
+        "yearWeek" in logData
+          ? `http://maco-coding.go.ro:8020/weekly-logs/${id}/decrementUpdate`
+          : `http://maco-coding.go.ro:8020/daily-logs/date/${logData.date}/habit/${logData.habitDTO.id}`;
+      const response = await axios.patch(url);
+      setSelectedLogData(response.data);
+      fetchLogs();
     } catch (err: any) {
       console.log(err.message);
     }
@@ -33,69 +63,84 @@ const MultiTargetCard = ({
     onSelect();
   };
 
+  useEffect(() => {}, [selectedLogData]);
+
   return (
     <View
       className={`gap-2 rounded-xl border-2 
         ${isSelected ? "border-red-500" : "border-transparent"}`}
     >
-      <TouchableOpacity
-        activeOpacity={0.8}
+      <View
         className={
-          "bg-white rounded-xl p-2 flex-row justify-around items-center h-14"
+          "bg-white rounded-xl p-1 flex-row justify-around items-center h-14"
         }
       >
-        <Text
-          className="text-start text-2xl text-black w-4/6 "
+        <TouchableOpacity
+          className=" w-8/12 h-full justify-center"
           onPress={handlePress}
+          activeOpacity={0.8}
         >
-          {logData.habitDTO.habitName}
-        </Text>
-        <View className="flex flex-row grow items-center justify-center">
-          <TouchableOpacity>
-            <Text className="text-5xl text-red-600 w-10 h-12 text-center align-middle">
+          <Text className="text-start text-2xl text-black ">
+            {logData.habitDTO.habitName}
+          </Text>
+        </TouchableOpacity>
+
+        <View className="flex flex-row items-center justify-between w-4/12 ">
+          <TouchableOpacity
+            className="h-full"
+            onPress={() => decrementUpdate(selectedLogData.id)}
+          >
+            <Text className="text-5xl text-red-600 w-6 h-full text-center align-middle">
               -
             </Text>
           </TouchableOpacity>
 
           <Text
-            // style={styles.text}
-            className="text-2xl h-full align-middle inline-block text-center mx-2 "
+            className={`text-2xl h-full align-middle text-center ${
+              selectedLogData.completed ? "text-green-600" : "text-gray-600"
+            }`}
           >
-            {logData.currentCount} /{logData.habitDTO.targetCount}
+            {selectedLogData.currentCount} /{" "}
+            {selectedLogData.habitDTO.targetCount}
           </Text>
-          <TouchableOpacity>
-            <Text className="text-5xl text-green-600 h-12 text-center align-middle w-10">
+          <TouchableOpacity
+            className="h-full"
+            onPress={() => addUpdate(selectedLogData.id)}
+          >
+            <Text className="text-4xl text-green-600 h-full text-center align-middle w-8">
               +
             </Text>
           </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </View>
       {isSelected && (
         <View className="bg-gray-200 -mt-4 pt-4 -z-40 rounded-b-xl justify-start p-5">
           <Text className="text-gray-800 text-sm">
-            Date created: {logData.habitDTO.dateCreated}
+            Date created: {selectedLogData.habitDTO.dateCreated}
             {"\n"}
-            Date updated: {logData.habitDTO.lastUpdated}
+            Date updated: {selectedLogData.habitDTO.lastUpdated}
             {"\n"}
-            Description: {logData.habitDTO.description}
+            Description: {selectedLogData.habitDTO.description}
             {"\n"}
-            Type: {logData.habitDTO.type}
+            Type: {selectedLogData.habitDTO.type}
             {"\n"}
-            Target: {logData.habitDTO.targetCount}
+            Target: {selectedLogData.habitDTO.targetCount}
             {"\n"}
-            Occurrence: {logData.habitDTO.occurrence}
+            Occurrence: {selectedLogData.habitDTO.occurrence}
             {"\n"}
-            Current streak: {logData.habitDTO.currentStreak}
+            Current streak: {selectedLogData.habitDTO.currentStreak}
             {"\n"}
-            Longest streak: {logData.habitDTO.bestStreak}
+            Longest streak: {selectedLogData.habitDTO.bestStreak}
             {"\n"}
-            Total completions: {logData.habitDTO.totalCount}
+            Total completions: {selectedLogData.habitDTO.totalCount}
             {"\n"}
-            Current count: {logData.currentCount}
+            Current count: {selectedLogData.currentCount}
             {"\n"}
-            Previous Week: {logData.previousCompleted ? "Yes" : "No"}
+            Completed: {selectedLogData.completed ? "Yes" : "No"}
             {"\n"}
-            Log id: {logData.id}
+            Previous Week: {selectedLogData.previousCompleted ? "Yes" : "No"}
+            {"\n"}
+            Log id: {selectedLogData.id}
           </Text>
         </View>
       )}

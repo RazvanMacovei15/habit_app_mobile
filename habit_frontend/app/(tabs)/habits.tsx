@@ -219,6 +219,7 @@ const Habits = () => {
               decrementDate={decrementDate}
             />
             <DailyLogScrollView
+              fetchLogs={() => fetchLogs()}
               loading={false}
               error={error}
               data={dailyLogData}
@@ -232,14 +233,17 @@ const Habits = () => {
         {selectedOccurrence === "WEEKLY" && (
           <View className="grow">
             <WeekByWeekNavigation
-              onPress={() => createWeeklyLogsByDate(selectedYearWeek)}
+              onPress={fetchLogs}
               selectedYearWeek={selectedYearWeek}
               incrementWeek={incrementWeek}
               decrementWeek={decrementWeek}
             />
             <WeeklyLogScrollView
+              fetchLogs={fetchLogs}
               selectedLog={selectedLog as WeeklyLogDTO}
-              onSelect={handleSelectWeeklyLogDTO}
+              onSelect={(log) =>
+                handleSelectWeeklyLogDTO(log as WeeklyLogDTO | null)
+              }
               data={weeklyLogData}
               error={error}
               loading={false}

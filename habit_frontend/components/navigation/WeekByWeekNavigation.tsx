@@ -48,9 +48,9 @@ const WeekByWeekNavigation = ({
         className="w-4/6 items-center flex flex-row p-1 justify-around"
         onPress={onPress}
       >
-        <Text>{`${monday.format("dddd, DD/MM/YYYY")} \n${sunday.format(
+        <Text className="">{`${monday.format(
           "dddd, DD/MM/YYYY"
-        )}`}</Text>
+        )} \n${sunday.format("dddd, DD/MM/YYYY")}`}</Text>
 
         <Text>{`Week\n${week}/${monday.format("YYYY")}`}</Text>
       </TouchableOpacity>

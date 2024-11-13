@@ -96,29 +96,30 @@ const EditHabitModal = ({
             }}
             placeholder={"Name of the habit"}
           />
-
-          <CustomDropdown
-            data={types}
-            title="type:"
-            defaultValue={habitForm.type}
-            onSelectValue={(e: string) =>
-              setHabitForm({
-                ...habitForm,
-                type: e,
-              })
-            }
-          />
-          <CustomDropdown
-            data={occurrences}
-            title="occurrence:"
-            defaultValue={habitForm.occurrence}
-            onSelectValue={(e: string) => {
-              setHabitForm({
-                ...habitForm,
-                occurrence: e,
-              });
-            }}
-          />
+          <View className="flex flex-row">
+            <CustomDropdown
+              data={types}
+              title="type:"
+              defaultValue={habitForm.type}
+              onSelectValue={(e: string) =>
+                setHabitForm({
+                  ...habitForm,
+                  type: e,
+                })
+              }
+            />
+            <CustomDropdown
+              data={occurrences}
+              title="occurrence:"
+              defaultValue={habitForm.occurrence}
+              onSelectValue={(e: string) => {
+                setHabitForm({
+                  ...habitForm,
+                  occurrence: e,
+                });
+              }}
+            />
+          </View>
           <AddDescriptionFormField
             title={"Description"}
             value={habitForm.description}

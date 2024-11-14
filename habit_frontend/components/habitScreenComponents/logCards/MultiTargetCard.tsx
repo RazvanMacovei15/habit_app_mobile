@@ -50,7 +50,7 @@ const MultiTargetCard = ({
       const url =
         "yearWeek" in logData
           ? `http://maco-coding.go.ro:8020/weekly-logs/${id}/decrementUpdate`
-          : `http://maco-coding.go.ro:8020/daily-logs/date/${logData.date}/habit/${logData.habitDTO.id}`;
+          : `http://maco-coding.go.ro:8020/daily-logs/${id}/decrementUpdate`;
       const response = await axios.patch(url);
       setSelectedLogData(response.data);
       fetchLogs();

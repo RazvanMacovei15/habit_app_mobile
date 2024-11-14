@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import WeekByWeekNavigation from "@/components/navigation/WeekByWeekNavigation";
 import WeeklyLogScrollView from "@/components/habitScreenComponents/scrollViews/WeeklyLogScrollView";
 import { HabitFormDTO } from "@/components/types/HabitFormDTO";
+import { set } from "date-fns";
 
 export type LogData = DailyLogDTO | WeeklyLogDTO;
 
@@ -125,6 +126,7 @@ const Habits = () => {
     setError(null);
     try {
       await axios.post(endpoint, form);
+      console.log(form);
       fetchLogs(); // Refresh logs after creation
     } catch (err: any) {
       setError(err.message);
@@ -135,7 +137,7 @@ const Habits = () => {
     setError(null);
     try {
       await axios.patch(endpoint, form);
-      fetchLogs(); // Refresh logs after update
+      // fetchLogs(); // Refresh logs after update
     } catch (err: any) {
       setError(err.message);
     }
@@ -162,6 +164,21 @@ const Habits = () => {
         setHabitForm(initialHabitFormState);
         setEditModalVisible(false);
       });
+    }
+  };
+
+  const handleSelectLog = (log: LogData | null) => {
+    setSelectedLog(log);
+    if (log) {
+      setHabitForm({
+        habitName: log.habitDTO.habitName,
+        type: log.habitDTO.type,
+        occurrence: log.habitDTO.occurrence,
+        description: log.habitDTO.description,
+        targetCount: log.habitDTO.targetCount.toString(),
+      });
+    } else {
+      setHabitForm(initialHabitFormState);
     }
   };
 
@@ -223,10 +240,8 @@ const Habits = () => {
               loading={false}
               error={error}
               data={dailyLogData}
-              selectedLog={selectedLog as LogData}
-              onSelect={(log) =>
-                handleSelectDailyLogDTO(log as DailyLogDTO | null)
-              }
+              selectedLog={selectedLog}
+              onSelect={handleSelectLog}
             />
           </View>
         )}
@@ -240,10 +255,8 @@ const Habits = () => {
             />
             <WeeklyLogScrollView
               fetchLogs={fetchLogs}
-              selectedLog={selectedLog as WeeklyLogDTO}
-              onSelect={(log) =>
-                handleSelectWeeklyLogDTO(log as WeeklyLogDTO | null)
-              }
+              selectedLog={selectedLog}
+              onSelect={handleSelectLog}
               data={weeklyLogData}
               error={error}
               loading={false}

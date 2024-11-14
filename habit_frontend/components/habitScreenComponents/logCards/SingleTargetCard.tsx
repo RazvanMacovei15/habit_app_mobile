@@ -41,7 +41,7 @@ const SingleTargetCard = ({
   return (
     <View
       className={`gap-2 rounded-xl border-2 
-        ${isSelected ? "border-red-500" : "border-transparent"}`}
+        ${isSelected ? "border-green-500" : "border-transparent"}`}
     >
       <View
         className={
@@ -62,7 +62,7 @@ const SingleTargetCard = ({
           <BouncyCheckBox
             size={35}
             isChecked={logData.completed}
-            fillColor="red"
+            fillColor="green"
             unFillColor="#FFFFFF"
             disableText={true}
             iconStyle={{

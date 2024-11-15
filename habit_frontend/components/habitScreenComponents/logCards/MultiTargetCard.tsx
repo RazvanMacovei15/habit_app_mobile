@@ -68,11 +68,11 @@ const MultiTargetCard = ({
   return (
     <View
       className={`gap-2 rounded-xl border-2 
-        ${isSelected ? "border-red-500" : "border-transparent"}`}
+        ${isSelected ? "border-red-500" : "border-transparent"} ${logData.completed ? "bg-green-700" : "bg-white"}`}
     >
       <View
         className={
-          "bg-white rounded-xl p-1 flex-row justify-around items-center h-14"
+          "bg-white rounded-xl p-2 flex-row justify-around items-center h-14"
         }
       >
         <TouchableOpacity
@@ -97,7 +97,7 @@ const MultiTargetCard = ({
 
           <Text
             className={`text-2xl h-full align-middle text-center ${
-              selectedLogData.completed ? "text-green-600" : "text-gray-600"
+              selectedLogData.completed ? "text-green-700" : "text-gray-600"
             }`}
           >
             {selectedLogData.currentCount} /{" "}
@@ -107,7 +107,7 @@ const MultiTargetCard = ({
             className="h-full"
             onPress={() => addUpdate(selectedLogData.id)}
           >
-            <Text className="text-4xl text-green-600 h-full text-center align-middle w-8">
+            <Text className="text-4xl text-green-700 h-full text-center align-middle w-8">
               +
             </Text>
           </TouchableOpacity>

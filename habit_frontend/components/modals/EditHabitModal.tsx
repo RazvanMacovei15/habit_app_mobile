@@ -39,7 +39,6 @@ const EditHabitModal = ({
         },
       });
       setOccurrences(response.data);
-      console.log("Occurrences: ", response.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -55,7 +54,6 @@ const EditHabitModal = ({
         },
       });
       setTypes(response.data);
-      console.log("Types: ", response.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -142,7 +140,7 @@ const EditHabitModal = ({
               onPress={() => setModalVisible(!modalVisible)}
               className="items-center justify-center bg-red-700 w-1/2 h-10 rounded-xl"
             >
-              <Text className="text-md text-white">CANCEL</Text>
+              <Text className="text-md text-white ">CANCEL</Text>
             </Pressable>
           </View>
         </View>

@@ -85,18 +85,6 @@ const Habits = () => {
     }
   };
 
-  const createWeeklyLogsByDate = async (yearWeek: number) => {
-    setError(null);
-    try {
-      const response = await axios.post(
-        `http://maco-coding.go.ro:8020/weekly-logs/createWeeklyLogsOnGivenWeek/${yearWeek}`
-      );
-      setWeeklyLogData(response.data);
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
   const fetchLogs = async () => {
     setError(null);
     if (selectedOccurrence === "DAILY") {
@@ -156,11 +144,11 @@ const Habits = () => {
     if (selectedLog) {
       const endpoint = `http://maco-coding.go.ro:8020/habits/${selectedLog.habitDTO.id}/updateDetails`;
       update(endpoint, habitForm).then(() => {
-        setHabitForm(initialHabitFormState);
+        fetchDailyLogsByDate(selectedDate);
         setSelectedLog(null);
+        setHabitForm(initialHabitFormState);
         setEditModalVisible(false);
       });
-      fetchLogs();
     }
   };
 
@@ -184,7 +172,7 @@ const Habits = () => {
   }, [selectedOccurrence, selectedDate, selectedYearWeek]);
 
   return (
-    <View className="flex flex-col justify-stretch h-full bg-[#FFFFF]">
+    <View className="flex flex-col justify-stretch h-full bg-transparent mb-10">
       <TopNav onPress={fetchLogs} />
       <View className="flex-col flex grow bg-gray-100">
         <OccurrenceNavigator

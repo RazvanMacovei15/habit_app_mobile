@@ -38,10 +38,12 @@ const SingleTargetCard = ({
     onSelect();
   };
 
+  useEffect(() => {}, [selectedLogData]);
+
   return (
     <View
       className={`gap-2 rounded-xl border-2 
-        ${isSelected ? "border-green-500" : "border-transparent"}`}
+        ${isSelected ? "border-green-500" : "border-transparent"} ${logData.completed ? "bg-green-700" : "bg-white"}`}
     >
       <View
         className={
@@ -54,7 +56,7 @@ const SingleTargetCard = ({
           activeOpacity={0.8}
         >
           <Text className="text-start text-2xl text-black ">
-            {selectedLogData.habitDTO.habitName}
+            {logData.habitDTO.habitName}
           </Text>
         </TouchableOpacity>
 
@@ -66,9 +68,11 @@ const SingleTargetCard = ({
             unFillColor="#FFFFFF"
             disableText={true}
             iconStyle={{
-              borderColor: "purple",
+              borderWidth: 2,
+              borderColor: "red",
             }}
-            innerIconStyle={{
+            innerIconStyle={{ 
+              borderColor: logData.completed ? "green" : "red",
               borderWidth: 2,
             }}
             textStyle={{

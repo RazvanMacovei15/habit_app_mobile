@@ -20,6 +20,28 @@ const DayByDayNavigation = ({
   decrementDate,
   selectedDate,
 }: DayByDayNavigationProps) => {
+  const today = new Date();
+
+  //method to check what day it is if its today say today if its tomorrow say tomorrow and if its yesterday say yesterday and if its none of those say the day
+  const checkDay = (date: string) => {
+    const dateObj = new Date(date);
+    if (dateObj.toDateString() === today.toDateString()) {
+      return "Today";
+    } else if (
+      dateObj.toDateString() ===
+      new Date(today.setDate(today.getDate() + 1)).toDateString()
+    ) {
+      return "Tomorrow";
+    } else if (
+      dateObj.toDateString() ===
+      new Date(today.setDate(today.getDate() - 2)).toDateString()
+    ) {
+      return "Yesterday";
+    } else {
+      return format(dateObj, "EEEE, MMMM d");
+    }
+  };
+
   return (
     <View className="flex flex-row justify-around h-16 items-center">
       <View className="border-r-2 w-1/6 items-center border-gray-400 flex flex-row justify-center">
@@ -31,7 +53,7 @@ const DayByDayNavigation = ({
         </TouchableOpacity>
       </View>
       <TouchableOpacity className="w-4/6 items-center">
-        <Text>{format(selectedDate, "EEEE, MMMM d, yyyy")}</Text>
+        <Text className="text-lg">{checkDay(selectedDate)}</Text>
       </TouchableOpacity>
       <View className="border-l-2 w-1/6 border-gray-400 items-center flex flex-row justify-center">
         <TouchableOpacity onPress={incrementDate} className="grow items-center">

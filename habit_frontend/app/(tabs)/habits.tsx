@@ -18,7 +18,6 @@ import dayjs from "dayjs";
 import WeekByWeekNavigation from "@/components/navigation/WeekByWeekNavigation";
 import WeeklyLogScrollView from "@/components/habitScreenComponents/scrollViews/WeeklyLogScrollView";
 import { HabitFormDTO } from "@/components/types/HabitFormDTO";
-import { set } from "date-fns";
 
 export type LogData = DailyLogDTO | WeeklyLogDTO;
 
@@ -36,10 +35,12 @@ const Habits = () => {
 
   const incrementDate = () =>
     setSelectedDate(dayjs(selectedDate).add(1, "day").format("YYYY-MM-DD"));
+
   const decrementDate = () =>
     setSelectedDate(
       dayjs(selectedDate).subtract(1, "day").format("YYYY-MM-DD")
     );
+
   const incrementWeek = () => setSelectedYearWeek(selectedYearWeek + 1);
   const decrementWeek = () => setSelectedYearWeek(selectedYearWeek - 1);
 
@@ -53,11 +54,6 @@ const Habits = () => {
   const [habitForm, setHabitForm] = useState(initialHabitFormState);
   const [selectedOccurrence, setSelectedOccurrence] = useState("WEEKLY");
 
-  const [selectedDailyLog, setSelectedDailyLog] = useState<DailyLogDTO | null>(
-    null
-  );
-  const [selectedWeeklyLog, setSelectedWeeklyLog] =
-    useState<WeeklyLogDTO | null>(null);
   const [selectedLog, setSelectedLog] = useState<LogData | null>(null);
   const isSelectedLog = selectedLog !== null;
 
@@ -137,7 +133,6 @@ const Habits = () => {
     setError(null);
     try {
       await axios.patch(endpoint, form);
-      // fetchLogs(); // Refresh logs after update
     } catch (err: any) {
       setError(err.message);
     }
@@ -162,8 +157,10 @@ const Habits = () => {
       const endpoint = `http://maco-coding.go.ro:8020/habits/${selectedLog.habitDTO.id}/updateDetails`;
       update(endpoint, habitForm).then(() => {
         setHabitForm(initialHabitFormState);
+        setSelectedLog(null);
         setEditModalVisible(false);
       });
+      fetchLogs();
     }
   };
 
@@ -176,40 +173,6 @@ const Habits = () => {
         occurrence: log.habitDTO.occurrence,
         description: log.habitDTO.description,
         targetCount: log.habitDTO.targetCount.toString(),
-      });
-    } else {
-      setHabitForm(initialHabitFormState);
-    }
-  };
-
-  const handleSelectDailyLogDTO = (dailyLogDTO: DailyLogDTO | null) => {
-    setSelectedLog(dailyLogDTO);
-    setSelectedWeeklyLog(null); // Clear weekly log selection
-    setSelectedDailyLog(dailyLogDTO);
-    if (dailyLogDTO) {
-      setHabitForm({
-        habitName: dailyLogDTO.habitDTO.habitName,
-        type: dailyLogDTO.habitDTO.type,
-        occurrence: dailyLogDTO.habitDTO.occurrence,
-        description: dailyLogDTO.habitDTO.description,
-        targetCount: dailyLogDTO.habitDTO.targetCount.toString(),
-      });
-    } else {
-      setHabitForm(initialHabitFormState);
-    }
-  };
-
-  const handleSelectWeeklyLogDTO = (weeklyLogDTO: WeeklyLogDTO | null) => {
-    setSelectedLog(weeklyLogDTO);
-    setSelectedDailyLog(null); // Clear daily log selection
-    setSelectedWeeklyLog(weeklyLogDTO);
-    if (weeklyLogDTO) {
-      setHabitForm({
-        habitName: weeklyLogDTO.habitDTO.habitName,
-        type: weeklyLogDTO.habitDTO.type,
-        occurrence: weeklyLogDTO.habitDTO.occurrence,
-        description: weeklyLogDTO.habitDTO.description,
-        targetCount: weeklyLogDTO.habitDTO.targetCount.toString(),
       });
     } else {
       setHabitForm(initialHabitFormState);

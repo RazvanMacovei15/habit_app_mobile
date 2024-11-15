@@ -61,27 +61,56 @@ export const AuthProvider = ({ children }: any) => {
     loadToken();
   }, []);
 
-  // Function to handle user registration
   const onRegister = async (
     username: string,
     email: string,
     password: string
   ) => {
     try {
+      console.log(username); // Log username for debugging
+      console.log(email); // Log email for debugging
+  
       // Send POST request to the registration endpoint
-      return await axios.post(`${API_URL}auth/login`, {
+      const result = await axios.post(`${API_URL}auth/signup`, {
         username,
         email,
         password,
       });
+  
+      console.log(result); // Log result for debugging
+  
+      // After successful registration, log the user in
+      if (result.status === 200 || result.status === 201) {
+        // Call the onLogin function directly
+        const loginResult = await onLogin(email, password);
+  
+        if ('error' in loginResult) {
+          // Handle login error if it occurs
+          console.error("Login after registration failed:", loginResult.msg);
+          return {
+            error: true,
+            msg: "Registration succeeded but login failed. Please try logging in.",
+          };
+        }
+        return loginResult; // Return login result
+      }
+  
+      return result; // Return the registration result
     } catch (error) {
-      // Return error message if registration fails
+      console.error(error); // Log error for debugging
+  
+      // Extract error message safely
+      const errorMsg =
+        (error as any)?.response?.data?.msg || "An unexpected error occurred.";
+  
       return {
         error: true,
-        msg: (error as any).response.data.msg,
+        msg: errorMsg,
       };
     }
   };
+  
+  
 
   const onLogin = async (email: string, password: string) => {
     try {

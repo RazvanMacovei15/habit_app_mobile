@@ -1,13 +1,16 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/FormField";
 import CustomButon from "@/components/CustomButton";
 
 import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { useAuth } from "../context/AuthContext";
 
 const SignUp = () => {
+  const { onLogin, onRegister } = useAuth();
+
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -16,7 +19,26 @@ const SignUp = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {};
+  const submitRegister = async () => {
+    if (form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      if (onRegister) {
+        await onRegister(form.username, form.email, form.password);
+
+        Alert.alert("Success", "User signed up successfully");
+        router.replace("/dashboard");
+      } else {
+        Alert.alert("Error", "Login function is not available");
+      }
+    } catch (error) {
+      Alert.alert("Error", (error as Error).message);
+    }
+  };
 
   return (
     <SafeAreaView className="bg-gray-800 h-full p-5">
@@ -66,7 +88,7 @@ const SignUp = () => {
           </View>
 
           <CustomButon
-            handlePress={submit}
+            handlePress={submitRegister}
             title={"Sign in"}
             isLoading={isSubmitting}
           />

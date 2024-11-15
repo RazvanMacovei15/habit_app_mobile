@@ -46,7 +46,7 @@ const WeeklyLogScrollView = ({
             <MultiTargetCard
               fetchLogs={fetchLogs}
               key={log.id}
-              isSelected={selectedLog === log}
+              isSelected={selectedLog?.id === log.id}
               onSelect={() => {
                 onSelect(selectedLog === log ? null : log);
               }}
@@ -57,7 +57,7 @@ const WeeklyLogScrollView = ({
               fetchLogs={fetchLogs}
               key={log.id}
               logData={log}
-              isSelected={selectedLog === log}
+              isSelected={selectedLog?.id === log.id}
               onSelect={() => {
                 onSelect(selectedLog === log ? null : log);
               }}

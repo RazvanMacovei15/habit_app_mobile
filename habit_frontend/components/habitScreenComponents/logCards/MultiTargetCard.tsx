@@ -68,7 +68,7 @@ const MultiTargetCard = ({
   return (
     <View
       className={`gap-2 rounded-xl border-2 
-        ${isSelected ? "border-red-500" : "border-transparent"} ${logData.completed ? "bg-green-700" : "bg-white"}`}
+        ${isSelected ? "border-red-500" : "border-transparent"}`}
     >
       <View
         className={

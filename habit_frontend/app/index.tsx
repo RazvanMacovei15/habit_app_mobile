@@ -35,15 +35,7 @@ export default function App() {
     );
   }
 
-  return (
-    <SafeAreaView>
-      <ScrollView contentContainerStyle={{ height: "100%" }}>
-        <View className="w-full items-center px-4 h-full justify-center">
-          
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+  
 }
 
 const styles = StyleSheet.create({

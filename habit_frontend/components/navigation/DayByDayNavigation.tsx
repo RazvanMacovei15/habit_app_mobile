@@ -38,7 +38,7 @@ const DayByDayNavigation = ({
     ) {
       return "Yesterday";
     } else {
-      return format(dateObj, "EEEE, MMMM d");
+      return format(dateObj, "EEEE, MMM d");
     }
   };
 

@@ -43,7 +43,7 @@ const SingleTargetCard = ({
   return (
     <View
       className={`gap-2 rounded-xl border-2 
-        ${isSelected ? "border-green-500" : "border-transparent"} ${logData.completed ? "bg-green-700" : "bg-white"}`}
+        ${isSelected ? "border-green-500" : "border-transparent"}`}
     >
       <View
         className={

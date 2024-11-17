@@ -25,9 +25,6 @@ const WeekByWeekNavigation = ({
   // Extract year and week from selectedYearWeek
   const year = Math.floor(selectedYearWeek / 100);
   const week = selectedYearWeek % 100;
-
-  console.log("this week in week navigation is: " + week);
-
   // Get the current week of the year and compare
   const currentWeek = getISOWeek(new Date());
 

@@ -37,6 +37,10 @@ const MoreScreensLayout = () => {
           title: "About",
         }}
       />
+      <Stack.Screen
+        name="addBodyStatModal"
+        options={{ presentation: "modal" }}
+      />
     </Stack>
   );
 };

@@ -1,5 +1,8 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { format } from "date-fns";
+import AddBodyStatsModal from "./addBodyStatModal";
+import { BodyStatsForm } from "@/components/types/BodyStatsForm";
 const mockMeasurements = [
   {
     weight: 70,
@@ -103,28 +106,56 @@ const mockMeasurements = [
 ];
 
 const MeasurementsTracking = () => {
+  const initialBodyStatsForm = {
+    weight: "",
+    waist: "",
+    abdomen: "",
+    chest: "",
+    bicep: "",
+    quad: "",
+    neck: "",
+  };
+  const [bodyForm, setBodyForm] = useState<BodyStatsForm>(initialBodyStatsForm);
+
+  const today = format(new Date(), "yyyy-MM-dd");
   return (
-    <View className="flex flex-col p-2">
+    <View className="flex flex-col">
       <View className="grow items-center justify-stretch h-full">
-        <Text className="text-3xl p-2 shadow-black">Body measurements</Text>
-        <ScrollView className="h-5/6 w-full">
+        <Text className="text-3xl p-5 w-full text-center bg-gray-50">
+          Body measurements
+        </Text>
+        <ScrollView className="h-5/6 px-5 w-full bg-gray-200">
           {mockMeasurements.map((measurement, index) => (
             <Pressable
               key={index}
-              className={`flex flex-row w-full items-center justify-around py-4 ${
-                index === 0 ? "" : "border-t border-gray-400"
-              } px-5`}
+              className={`flex flex-row w-full items-center justify-around ${
+                index === 0 ? "" : "border-t border-dotted"
+              } py-5`}
             >
-              <Text className="text-xl">Entry {index + 1}</Text>
-              <Text className="text-lg">Weight: {measurement.weight} kg</Text>
+              <Text className="text-lg ">{today.toString()}</Text>
+              <Text className="text-lg">Weight: {measurement.weight}kg</Text>
+              <Text className="text-lg">{95 - measurement.weight}</Text>
             </Pressable>
           ))}
         </ScrollView>
-        <View className="h-1/6 w-full items-center justify-center">
-          <Pressable className="p-1 text-green-700 w-full just">
+        <View className="w-full items-center justify-center bg-gray-200 px-16 py-2">
+          <Pressable className="p-1 w-full rounded-3xl">
             <Text className="text-xl text-center border border-dashed p-5 w-full rounded-full">
               + add new measurement
             </Text>
+            <AddBodyStatsModal
+              modalVisible={false}
+              setModalVisible={function (value: boolean): void {
+                throw new Error("Function not implemented.");
+              }}
+              bodyStatsForm={initialBodyStatsForm}
+              setHabitForm={function (value: any): void {
+                throw new Error("Function not implemented.");
+              }}
+              handleCreateHabit={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
           </Pressable>
         </View>
       </View>

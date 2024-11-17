@@ -19,7 +19,11 @@ const RootLayout = () => {
         />
         <Stack.Screen
           name="(more)"
-          options={{ headerShown: true, title: "More" }}
+          options={{
+            headerShown: true,
+            title: "More",
+            headerBackTitle: "Back",
+          }}
         />
       </Stack>
     </AuthProvider>

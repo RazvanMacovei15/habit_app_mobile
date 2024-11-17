@@ -18,16 +18,23 @@ const More = () => {
     }
   };
 
-  //array with menu items such as settings etc.
-  // Array with menu items such as settings, profile, help, etc.
   const menuItems = [
-    { title: "Gym Training", action: () => router.push("/gym") },
+    {
+      title: "Gym Training",
+      action: () => router.push("/gym"),
+    },
     {
       title: "Measurements Tracking",
       action: () => router.push("/measurementsTracking"),
     },
-    { title: "Leave feedback", action: () => router.push("/feedback") },
-    { title: "About", action: () => router.push("/about") },
+    {
+      title: "Leave feedback",
+      action: () => router.push("/feedback"),
+    },
+    {
+      title: "About",
+      action: () => router.push("/about"),
+    },
   ];
 
   return (

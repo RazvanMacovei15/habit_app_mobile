@@ -21,7 +21,8 @@ const RootLayout = () => {
           name="(more)"
           options={{
             headerShown: true,
-            title: "",
+            headerBackTitleVisible: true,
+            title: "More",
             headerBackTitle: "Back",
           }}
         />

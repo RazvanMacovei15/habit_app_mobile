@@ -14,33 +14,41 @@ import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
 import DailyLogScrollView from "@/components/habitScreenComponents/scrollViews/DailyLogScrollView";
 import DayByDayNavigation from "@/components/navigation/DayByDayNavigation";
-import dayjs from "dayjs";
 import WeekByWeekNavigation from "@/components/navigation/WeekByWeekNavigation";
 import WeeklyLogScrollView from "@/components/habitScreenComponents/scrollViews/WeeklyLogScrollView";
 import { HabitFormDTO } from "@/components/types/HabitFormDTO";
 import ErrorBoundary from "@/components/modals/ErrorBoundary";
+import {
+  getISOWeek,
+  format,
+  getYear,
+  getMonth,
+  addDays,
+  subDays,
+} from "date-fns";
 
 export type LogData = DailyLogDTO | WeeklyLogDTO;
 
 const Habits = () => {
-  const today = dayjs().format("YYYY-MM-DD");
-  const thisWeek = dayjs().week() + dayjs().year() * 100;
-  const month = dayjs().month() + 1;
+  const today = format(new Date(), "yyyy-MM-dd");
+  const thisWeek = getISOWeek(today);
+  const thisMonth = getMonth(today) + 1;
+  const thisYear = getYear(today);
+  const thisYearWeek = thisWeek + thisYear * 100;
 
   const { authState } = useAuth();
   const token = authState?.token;
   const [error, setError] = useState<string | null>(null);
 
   const [selectedDate, setSelectedDate] = useState<string>(today);
-  const [selectedYearWeek, setSelectedYearWeek] = useState(thisWeek);
-  const [selectedMonth, setSelectedMonth] = useState(month);
+  const [selectedYearWeek, setSelectedYearWeek] = useState(thisYearWeek);
+  const [selectedMonth, setSelectedMonth] = useState(thisMonth);
 
   const incrementDate = () =>
-    setSelectedDate(dayjs(selectedDate).add(1, "day").format("YYYY-MM-DD"));
+    setSelectedDate(format(addDays(new Date(selectedDate), 1), "yyyy-MM-dd"));
+
   const decrementDate = () =>
-    setSelectedDate(
-      dayjs(selectedDate).subtract(1, "day").format("YYYY-MM-DD")
-    );
+    setSelectedDate(format(subDays(new Date(selectedDate), 1), "yyyy-MM-dd"));
 
   const incrementWeek = () => setSelectedYearWeek(selectedYearWeek + 1);
   const decrementWeek = () => setSelectedYearWeek(selectedYearWeek - 1);
@@ -207,9 +215,9 @@ const Habits = () => {
 
   useEffect(() => {
     if (selectedOccurrence === "DAILY") {
-      setSelectedDate(dayjs().format("YYYY-MM-DD")); // Set selected date to today
+      setSelectedDate(today); // Set selected date to today
     } else if (selectedOccurrence === "WEEKLY") {
-      setSelectedYearWeek(dayjs().week() + dayjs().year() * 100); // Set selected week to the current year-week
+      setSelectedYearWeek(thisYearWeek); // Set selected week to the current year-week
     }
   }, [selectedOccurrence]);
 

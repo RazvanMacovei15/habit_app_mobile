@@ -18,24 +18,25 @@ import dayjs from "dayjs";
 import WeekByWeekNavigation from "@/components/navigation/WeekByWeekNavigation";
 import WeeklyLogScrollView from "@/components/habitScreenComponents/scrollViews/WeeklyLogScrollView";
 import { HabitFormDTO } from "@/components/types/HabitFormDTO";
+import ErrorBoundary from "@/components/modals/ErrorBoundary";
 
 export type LogData = DailyLogDTO | WeeklyLogDTO;
 
 const Habits = () => {
+  const today = dayjs().format("YYYY-MM-DD");
+  const thisWeek = dayjs().week() + dayjs().year() * 100;
+  const month = dayjs().month() + 1;
+
   const { authState } = useAuth();
   const token = authState?.token;
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [selectedDate, setSelectedDate] = useState(
-    dayjs().format("YYYY-MM-DD")
-  );
-  const [selectedYearWeek, setSelectedYearWeek] = useState(
-    dayjs().week() + dayjs().year() * 100
-  );
+  const [selectedDate, setSelectedDate] = useState<string>(today);
+  const [selectedYearWeek, setSelectedYearWeek] = useState(thisWeek);
+  const [selectedMonth, setSelectedMonth] = useState(month);
 
   const incrementDate = () =>
     setSelectedDate(dayjs(selectedDate).add(1, "day").format("YYYY-MM-DD"));
-
   const decrementDate = () =>
     setSelectedDate(
       dayjs(selectedDate).subtract(1, "day").format("YYYY-MM-DD")
@@ -44,6 +45,9 @@ const Habits = () => {
   const incrementWeek = () => setSelectedYearWeek(selectedYearWeek + 1);
   const decrementWeek = () => setSelectedYearWeek(selectedYearWeek - 1);
 
+  const incrementMonth = () => setSelectedMonth(selectedMonth + 1);
+  const decrementMonth = () => setSelectedMonth(selectedMonth - 1);
+
   const initialHabitFormState: HabitForm = {
     habitName: "",
     type: "",
@@ -51,14 +55,13 @@ const Habits = () => {
     description: "",
     targetCount: "",
   };
+
   const [habitForm, setHabitForm] = useState(initialHabitFormState);
-  const [selectedOccurrence, setSelectedOccurrence] = useState("WEEKLY");
+  const [selectedOccurrence, setSelectedOccurrence] = useState("DAILY");
 
   const [selectedLog, setSelectedLog] = useState<LogData | null>(null);
   const isSelectedLog = selectedLog !== null;
-
-  const [dailyLogData, setDailyLogData] = useState<DailyLogDTO[]>([]);
-  const [weeklyLogData, setWeeklyLogData] = useState<WeeklyLogDTO[]>([]);
+  const [logData, setLogData] = useState<LogData[]>([]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -66,12 +69,40 @@ const Habits = () => {
   const fetchDailyLogsByDate = async (date: string) => {
     setError(null);
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         `http://maco-coding.go.ro:8020/daily-logs/date/${date}`
       );
-      setDailyLogData(response.data);
+      setLogData(response.data);
     } catch (err: any) {
       setError(err.message);
+    }
+  };
+
+  const retrieveDailyLogData = async (endpoint: string) => {
+    setError(null);
+    try {
+      const response = await axios.get(endpoint);
+      if (response.data.length === 0) {
+        await fetchDailyLogsByDate(selectedDate); // Try fetching by date
+        console.log("so this is where the problem lies?");
+      } else {
+        // setDailyLogData(response.data); // Update state only with valid data
+        setLogData(response.data);
+      }
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const fetchWeeklyLogsByYearWeek = async (yearweek: number) => {
+    setError(null);
+    try {
+      const response = await axios.post(
+        `http://maco-coding.go.ro:8020/weekly-logs/createWeeklyLogsOnGivenWeek/${yearweek}`
+      );
+      setLogData(response.data);
+    } catch (err: any) {
+      setError(`Failed to create logs: ${err.message}`);
     }
   };
 
@@ -79,20 +110,25 @@ const Habits = () => {
     setError(null);
     try {
       const response = await axios.get(endpoint);
-      setWeeklyLogData(response.data);
+      if (response.data.length === 0) {
+        await fetchWeeklyLogsByYearWeek(selectedYearWeek);
+      } else {
+        setLogData(response.data);
+      }
     } catch (err: any) {
       setError(err.message);
     }
   };
 
+  // Usage in fetchLogs:
   const fetchLogs = async () => {
     setError(null);
     if (selectedOccurrence === "DAILY") {
-      await fetchDailyLogsByDate(selectedDate);
+      const endpoint = `http://maco-coding.go.ro:8020/daily-logs/date/${selectedDate}`;
+      await retrieveDailyLogData(endpoint);
     } else if (selectedOccurrence === "WEEKLY") {
-      await retrieveWeeklyLogData(
-        `http://maco-coding.go.ro:8020/weekly-logs/getWeeklyLogsByYearWeek/${selectedYearWeek}`
-      );
+      const endpoint = `http://maco-coding.go.ro:8020/weekly-logs/getWeeklyLogsByYearWeek/${selectedYearWeek}`;
+      await retrieveWeeklyLogData(endpoint);
     }
   };
 
@@ -110,7 +146,6 @@ const Habits = () => {
     setError(null);
     try {
       await axios.post(endpoint, form);
-      console.log(form);
       fetchLogs(); // Refresh logs after creation
     } catch (err: any) {
       setError(err.message);
@@ -144,8 +179,7 @@ const Habits = () => {
     if (selectedLog) {
       const endpoint = `http://maco-coding.go.ro:8020/habits/${selectedLog.habitDTO.id}/updateDetails`;
       update(endpoint, habitForm).then(() => {
-        fetchDailyLogsByDate(selectedDate);
-        setSelectedLog(null);
+        fetchLogs();
         setHabitForm(initialHabitFormState);
         setEditModalVisible(false);
       });
@@ -171,10 +205,18 @@ const Habits = () => {
     fetchLogs();
   }, [selectedOccurrence, selectedDate, selectedYearWeek]);
 
+  useEffect(() => {
+    if (selectedOccurrence === "DAILY") {
+      setSelectedDate(dayjs().format("YYYY-MM-DD")); // Set selected date to today
+    } else if (selectedOccurrence === "WEEKLY") {
+      setSelectedYearWeek(dayjs().week() + dayjs().year() * 100); // Set selected week to the current year-week
+    }
+  }, [selectedOccurrence]);
+
   return (
-    <View className="flex flex-col justify-stretch h-full bg-transparent mb-10">
+    <View className="flex flex-col justify-stretch h-full mb-10">
       <TopNav onPress={fetchLogs} />
-      <View className="flex-col flex grow bg-gray-100">
+      <View className="flex-col flex grow">
         <OccurrenceNavigator
           selectedOccurrence={selectedOccurrence}
           setSelectedOccurrence={setSelectedOccurrence}
@@ -190,7 +232,7 @@ const Habits = () => {
               fetchLogs={() => fetchLogs()}
               loading={false}
               error={error}
-              data={dailyLogData}
+              data={logData}
               selectedLog={selectedLog}
               onSelect={handleSelectLog}
             />
@@ -208,7 +250,7 @@ const Habits = () => {
               fetchLogs={fetchLogs}
               selectedLog={selectedLog}
               onSelect={handleSelectLog}
-              data={weeklyLogData}
+              data={logData}
               error={error}
               loading={false}
             />
@@ -219,22 +261,24 @@ const Habits = () => {
             Monthly logs will be displayed here
           </Text>
         )}
-        <EditHabitModal
-          modalVisible={editModalVisible}
-          setModalVisible={setEditModalVisible}
-          habitForm={habitForm}
-          setHabitForm={setHabitForm}
-          handleUpdate={handleUpdateHabit}
-        />
-        <AddHabitModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          habitForm={habitForm}
-          handleCreateHabit={handleCreateHabit}
-          setHabitForm={setHabitForm}
-        />
+        <ErrorBoundary>
+          <EditHabitModal
+            modalVisible={editModalVisible}
+            setModalVisible={setEditModalVisible}
+            habitForm={habitForm}
+            setHabitForm={setHabitForm}
+            handleUpdate={handleUpdateHabit}
+          />
+          <AddHabitModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            habitForm={habitForm}
+            handleCreateHabit={handleCreateHabit}
+            setHabitForm={setHabitForm}
+          />
+        </ErrorBoundary>
       </View>
-      <View className="h-20 items-center justify-around flex-row bg-gray-100 border-red-300 rounded-t-3xl shadow-2xl shadow-slate-900">
+      <View className="h-20 items-center justify-around flex-row bg-gray-100">
         <EditCustomButton
           isDisabled={!isSelectedLog}
           onPress={() => setEditModalVisible(true)}
@@ -249,7 +293,7 @@ const Habits = () => {
           isDisabled={!isSelectedLog}
           selectedHabit={selectedLog?.habitDTO ?? null}
           onPress={() => {
-            if (selectedLog?.habitDTO && token) {
+            if (selectedLog?.habitDTO) {
               const endpoint = `http://maco-coding.go.ro:8020/habits/${selectedLog.habitDTO.id}/delete`;
               deleteData(endpoint);
               setSelectedLog(null);

@@ -30,16 +30,8 @@ const CustomDropdown = ({
     value: item,
   }));
 
-  const renderLabel = () => {
-    if (selectedValue || isVisible) {
-      return <Text className="text-sm">{title.toUpperCase()}</Text>;
-    }
-    return null;
-  };
-
   return (
     <View className="w-1/2 mt-4 mx-1">
-      {/* {renderLabel()} */}
       <Text className="text-xl">{title.toUpperCase()}</Text>
       <Dropdown
         data={dropdownData}

@@ -14,12 +14,15 @@ interface PlusCustomButtonProps {
 
 const PlusCustomButton = ({ onPress }: PlusCustomButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      onPress={onPress}
+      className="items-center justify-center grow"
+    >
       <Image
         source={icons.plus as ImageSourcePropType}
         tintColor={"black"}
         resizeMode="contain"
-        className="w-18 h-18"
+        className="w-16 h-16"
       />
     </TouchableOpacity>
   );

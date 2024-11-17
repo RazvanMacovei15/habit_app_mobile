@@ -1,29 +1,38 @@
-import { View, Text, BackHandler } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, BackHandler, Alert } from "react-native";
+import React, { useCallback, useEffect } from "react";
 import TopNav from "@/components/navigation/TopNav";
-import { usePathname, useRouter } from "expo-router";
+import { useFocusEffect, usePathname, useRouter } from "expo-router";
 
 const Dashboard = () => {
-  const router = useRouter();
-  const pathname = usePathname();  // Get the current pathname
 
-  useEffect(() => {
-    const backAction = () => {
-      // Check if we are on the default route (i.e., index.js)
-      if (pathname === "/") {  // Default route for app/index.js
-        // Prevent back action on the default route
-        return true;  // Prevent the back action
-      }
-      return false;  // Allow back press for other screens
-    };
+  // Exit app when back button is pressed
+  const exitApp = () => {
+    BackHandler.exitApp();
+  };
 
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+  // Handle back button on this specific screen
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        // Customize the behavior as needed (e.g., show confirmation dialog)
+        Alert.alert(
+          'Exit App',
+          'Are you sure you want to exit?',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Yes', onPress: exitApp }
+          ]
+        );
+        return true; // Prevent default behavior
+      };
 
-    return () => {
-      backHandler.remove();  // Clean up the event listener
-    };
-  }, [pathname]);  // Listen for pathname changes
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
+      // Clean up the event listener when the screen loses focus
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+ 
   return (
     <View className="bg-gray-200 flex-1">
       <TopNav onPress={function (): void {

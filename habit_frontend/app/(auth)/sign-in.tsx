@@ -1,12 +1,40 @@
-import { View, Text, ScrollView, Alert } from "react-native";
-import React, { useState } from "react";
+import { View, Text, ScrollView, Alert, BackHandler } from "react-native";
+import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/FormField";
 import CustomButon from "@/components/CustomButton";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 
 const SignIn = () => {
+// Exit app when back button is pressed
+const exitApp = () => {
+  BackHandler.exitApp();
+};
+
+// Handle back button on this specific screen
+useFocusEffect(
+  useCallback(() => {
+    const onBackPress = () => {
+      // Customize the behavior as needed (e.g., show confirmation dialog)
+      Alert.alert(
+        'Exit App',
+        'Are you sure you want to exit?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Yes', onPress: exitApp }
+        ]
+      );
+      return true; // Prevent default behavior
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    // Clean up the event listener when the screen loses focus
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  }, [])
+);
+
   const { onLogin, onRegister } = useAuth();
 
   const [form, setForm] = useState({

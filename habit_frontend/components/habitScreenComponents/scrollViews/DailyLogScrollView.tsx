@@ -38,7 +38,7 @@ const DailyLogScrollView = ({
     );
   }
   return (
-    <ScrollView className="h-1/2 px-2 bg-gray-100 mt-2">
+    <ScrollView className="h-1/2 px-2 bg-transparent mt-2">
       <View className=" gap-2 justify-start flex-col">
         {data.map((log) =>
           log.habitDTO.targetCount > 1 ? (

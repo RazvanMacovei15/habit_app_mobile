@@ -15,10 +15,10 @@ const OccurrenceNavigator = ({
   };
   const getButtonClasses = (occurrence: string) =>
     selectedOccurrence === occurrence
-      ? "bg-red-600  w-1/3 py-2 rounded-lg items-center justify-center"
-      : "bg-gray-400  py-2 rounded-lg w-1/3 items-center justify-center";
+      ? "bg-red-600  py-2 w-1/3 rounded-lg items-center justify-center"
+      : "bg-gray-400  py-2 w-1/3 rounded-lg items-center justify-center";
   return (
-    <View className="mx-5 h-10 justify-evenly items-center  bg-gray-100 rounded-xl flex flex-row gap-4">
+    <View className="mx-4 h-10 justify-around items-center bg-gray-100 rounded-xl flex flex-row gap-1">
       <TouchableOpacity
         onPress={() => handlePress("DAILY")}
         className={getButtonClasses("DAILY")}

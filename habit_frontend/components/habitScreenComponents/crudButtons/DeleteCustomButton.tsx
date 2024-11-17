@@ -21,7 +21,11 @@ const DeleteCustomButon = ({
   onPress,
 }: DeleteCustomButtonProps) => {
   return (
-    <TouchableOpacity disabled={isDisabled} onPress={onPress}>
+    <TouchableOpacity
+      disabled={isDisabled}
+      onPress={onPress}
+      className="grow items-center justify-center"
+    >
       <Image
         source={icons.deletePNG as ImageSourcePropType}
         className={`w-10 h-10 ${isDisabled ? "opacity-30" : ""}`}

@@ -159,7 +159,10 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   // Function to handle user logout
-  const onLogout = async () => {
+const onLogout = async () => {
+  console.log("onLogout called");
+
+  try {
     // Delete token from secure storage
     await SecureStorage.deleteItemAsync(TOKEN_KEY);
 
@@ -171,9 +174,15 @@ export const AuthProvider = ({ children }: any) => {
       token: null,
       authenticated: false,
     });
+    console.log("User logged out successfully");
 
+  } catch (error) {
+    console.error("Error during logout:", error);
+  } finally {
+    // Navigate to the login/sign-in screen
     router.push("/sign-in");
-  };
+  }
+};
 
   // Define the values that will be provided by the authentication context
   const value = {
@@ -186,3 +195,7 @@ export const AuthProvider = ({ children }: any) => {
   // Return the context provider with the specified value, wrapping around children components
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+function dispatch(arg0: { type: string; }) {
+  throw new Error("Function not implemented.");
+}
+

@@ -71,7 +71,7 @@ const SingleTargetCard = ({
               borderWidth: 2,
               borderColor: "red",
             }}
-            innerIconStyle={{ 
+            innerIconStyle={{
               borderColor: logData.completed ? "green" : "red",
               borderWidth: 2,
             }}

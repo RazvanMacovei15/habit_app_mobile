@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, ScrollView, ActivityIndicator, Pressable } from "react-native";
 import "../global.css";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect, router } from "expo-router";
@@ -17,9 +17,9 @@ export default function App() {
       setIsLoading(false);
       // Navigate based on authentication state
       if (authState?.authenticated) {
-        router.push("/dashboard");
+        router.replace("/dashboard");
       } else {
-        router.push("/sign-in");
+        router.replace("/sign-in");
       }
     }, 2000);
 
@@ -34,21 +34,5 @@ export default function App() {
       </SafeAreaView>
     );
   }
-
-  
 }
 
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-  },
-  title: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-});

@@ -38,7 +38,6 @@ const AddHabitModal = ({
         },
       });
       setOccurrences(response.data);
-      console.log("Occurrences: ", response.data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -53,7 +52,6 @@ const AddHabitModal = ({
         },
       });
       setTypes(response.data);
-      console.log("Types: ", response.data);
     } catch (err: any) {
       setError(err.message);
     } finally {

@@ -97,7 +97,7 @@ const MultiTargetCard = ({
 
           <Text
             className={`text-2xl h-full align-middle text-center ${
-              selectedLogData.completed ? "text-green-700" : "text-gray-600"
+              selectedLogData.completed ? "text-green-600" : "text-gray-600"
             }`}
           >
             {selectedLogData.currentCount} /{" "}

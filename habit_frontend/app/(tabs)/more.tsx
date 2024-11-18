@@ -24,6 +24,10 @@ const More = () => {
       action: () => router.push("/gym"),
     },
     {
+      title: "Weight Measuring",
+      action: () => router.push("/weightMeasuring"),
+    },
+    {
       title: "Measurements Tracking",
       action: () => router.push("/measurementsTracking"),
     },

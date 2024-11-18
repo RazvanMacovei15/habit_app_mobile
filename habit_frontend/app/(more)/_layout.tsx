@@ -14,6 +14,14 @@ const MoreScreensLayout = () => {
         }}
       />
       <Stack.Screen
+        name="weightMeasuring"
+        options={{
+          headerShown: false,
+          animation: "fade",
+          title: "Weight Measuring",
+        }}
+      />
+      <Stack.Screen
         name="measurementsTracking"
         options={{
           headerShown: false,

@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import AddBodyStatsModal from "../../components/modals/addBodyStatModal";
 import { BodyStatsForm } from "@/components/types/BodyStatsForm";
 import { Link } from "expo-router";
+import { BodyStatsDTO } from "@/components/types/BodyStatsDTO";
+
 const mockMeasurements = [
   {
     weight: 70,
@@ -108,6 +110,8 @@ const mockMeasurements = [
 
 const MeasurementsTracking = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [data, setData] = useState<BodyStatsDTO[]>(mockMeasurements);
+
   const initialBodyStatsForm = {
     weight: "",
     waist: "",
@@ -120,6 +124,23 @@ const MeasurementsTracking = () => {
   const [bodyForm, setBodyForm] = useState<BodyStatsForm>(initialBodyStatsForm);
 
   const today = format(new Date(), "yyyy-MM-dd");
+
+  const handleCreateBodyStats = () => {
+    const newBodyStats: BodyStatsDTO = {
+      weight: parseFloat(bodyForm.weight),
+      waist: parseFloat(bodyForm.waist),
+      abdomen: parseFloat(bodyForm.abdomen),
+      chest: parseFloat(bodyForm.chest),
+      bicep: parseFloat(bodyForm.bicep),
+      quad: parseFloat(bodyForm.quad),
+      neck: parseFloat(bodyForm.neck),
+    };
+    const newData = [...data, newBodyStats];
+    setData(newData);
+    setModalVisible(false);
+    setBodyForm(initialBodyStatsForm);
+  };
+
   return (
     <View className="flex flex-col">
       <View className="grow items-center justify-stretch h-full">
@@ -127,7 +148,7 @@ const MeasurementsTracking = () => {
           Body measurements
         </Text>
         <ScrollView className="h-5/6 px-5 w-full bg-gray-200">
-          {mockMeasurements.map((measurement, index) => (
+          {data.map((measurement, index) => (
             <Pressable
               key={index}
               className={`flex flex-row w-full items-center justify-around ${
@@ -153,12 +174,8 @@ const MeasurementsTracking = () => {
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             bodyStatsForm={bodyForm}
-            setHabitForm={function (value: any): void {
-              throw new Error("Function not implemented.");
-            }}
-            handleCreateBodyStats={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            setHabitForm={setBodyForm}
+            handleCreateBodyStats={handleCreateBodyStats}
           />
         </View>
       </View>

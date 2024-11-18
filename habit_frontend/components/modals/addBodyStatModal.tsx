@@ -21,22 +21,6 @@ const AddBodyStatsModal = ({
   setHabitForm,
   handleCreateBodyStats,
 }: AddBodyStatsModalProps) => {
-  const { authState } = useAuth();
-
-  const [bodyForm, setBodyForm] = useState<BodyStatsForm>({
-    ...bodyStatsForm,
-  });
-
-  const initialBodyStatsForm = {
-    weight: "",
-    waist: "",
-    abdomen: "",
-    chest: "",
-    bicep: "",
-    quad: "",
-    neck: "",
-  };
-
   return (
     <>
       <Modal
@@ -45,69 +29,69 @@ const AddBodyStatsModal = ({
         hasBackdrop={true}
         backdropColor="black"
         statusBarTranslucent={false}
-        backdropOpacity={0.4}
+        backdropOpacity={0.8}
         backdropTransitionInTiming={25}
         backdropTransitionOutTiming={25}
         onBackButtonPress={() => setModalVisible(!modalVisible)}
       >
-        <View className="w-full gap-1 p-2 bg-white items-center justify-evenly flex flex-col shadow-2xl shadow-slate-900 rounded-2xl">
+        <View className="w-full gap p-2 bg-white items-center justify-evenly flex flex-col shadow-2xl shadow-slate-900 rounded-2xl">
           <AddBodyStat
             title={"Weight"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.weight}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, weight: e })
+            }
+            placeholder={"kgs..."}
           />
           <AddBodyStat
             title={"Waist"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.waist}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, waist: e })
+            }
+            placeholder={"cm..."}
           />
           <AddBodyStat
             title={"Abdomen"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.abdomen}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, abdomen: e })
+            }
+            placeholder={"cm..."}
           />
           <AddBodyStat
             title={"Chest"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.chest}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, chest: e })
+            }
+            placeholder={"cm..."}
           />
           <AddBodyStat
             title={"Bicep"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.bicep}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, bicep: e })
+            }
+            placeholder={"cm..."}
           />
           <AddBodyStat
             title={"Quad"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.quad}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, quad: e })
+            }
+            placeholder={"cm..."}
           />
           <AddBodyStat
             title={"Neck"}
-            value={""}
-            handleChangeText={function (text: string): void {
-              throw new Error("Function not implemented.");
-            }}
-            placeholder={""}
+            value={bodyStatsForm.neck}
+            handleChangeText={(e) =>
+              setHabitForm({ ...bodyStatsForm, neck: e })
+            }
+            placeholder={"cm..."}
           />
-          <View className="flex flex-row w-full justify-between m-5">
+          <View className="flex flex-row w-full justify-between m-2">
             <Pressable
               onPress={() => handleCreateBodyStats()}
               className="items-center justify-center bg-green-700 w-1/2 h-10 rounded-xl"

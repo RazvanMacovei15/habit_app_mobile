@@ -1,10 +1,11 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import AddBodyStatsModal from "../../components/modals/addBodyStatModal";
-import { BodyStatsForm } from "@/components/types/BodyStatsForm";
+import AddBodyStatsModal from "../../components/modals/AddBodyStatModal";
+import { BodyStatsForm } from "@/components/types/forms/BodyStatsForm";
 import { Link } from "expo-router";
-import { WeightForm } from "@/components/types/WeightForm";
+import { WeightForm } from "@/components/types/forms/WeightForm";
+import { WeightDTO } from "@/components/types/WeightDTO";
 const mockMeasurements = [
   {
     weight: 70,
@@ -43,6 +44,7 @@ const mockMeasurements = [
 
 const MeasurementsTracking = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [data, setData] = useState<WeightDTO[]>(mockMeasurements);
 
   const initialWeightForm = {
     weight: "",
@@ -57,7 +59,7 @@ const MeasurementsTracking = () => {
           Body Weight
         </Text>
         <ScrollView className="h-5/6 px-5 w-full bg-gray-200">
-          {mockMeasurements.map((measurement, index) => (
+          {data.map((measurement, index) => (
             <Pressable
               key={index}
               className={`flex flex-row w-full items-center justify-around ${

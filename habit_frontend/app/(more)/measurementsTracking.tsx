@@ -1,8 +1,8 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import AddBodyStatsModal from "../../components/modals/addBodyStatModal";
-import { BodyStatsForm } from "@/components/types/BodyStatsForm";
+import AddBodyStatsModal from "../../components/modals/AddBodyStatModal";
+import { BodyStatsForm } from "@/components/types/forms/BodyStatsForm";
 import { Link } from "expo-router";
 import { BodyStatsDTO } from "@/components/types/BodyStatsDTO";
 

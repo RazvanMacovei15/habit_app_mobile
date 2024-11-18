@@ -2,7 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Modal from "react-native-modal";
 import { useAuth } from "../../app/context/AuthContext";
-import { BodyStatsForm } from "@/components/types/BodyStatsForm";
+import { BodyStatsForm } from "@/components/types/forms/BodyStatsForm";
 import AddHabitFormField from "@/components/habitScreenComponents/formFields/AddHabitFormField";
 import AddBodyStat from "@/components/habitScreenComponents/formFields/AddBodyStat";
 

@@ -6,7 +6,7 @@ import CustomDropdown from "../CustomDropdown";
 import AddDescriptionFormField from "../habitScreenComponents/formFields/AddDescriptionFormField";
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";
-import { HabitForm } from "../types/HabitForm";
+import { HabitForm } from "../types/forms/HabitForm";
 import AddTargetNumberFormField from "../habitScreenComponents/formFields/AddTargetNumberFormFields";
 
 interface AddHabitModalProps {

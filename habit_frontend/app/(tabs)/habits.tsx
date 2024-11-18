@@ -9,7 +9,7 @@ import axios from "axios";
 import AddHabitModal from "@/components/modals/AddHabitModal";
 import EditHabitModal from "@/components/modals/EditHabitModal";
 import OccurrenceNavigator from "@/components/navigation/OccurrenceNavigator";
-import { HabitForm } from "../../components/types/HabitForm";
+import { HabitForm } from "../../components/types/forms/HabitForm";
 import { DailyLogDTO } from "@/components/types/DailyLogDTO";
 import { WeeklyLogDTO } from "@/components/types/WeeklyLogDTO";
 import DailyLogScrollView from "@/components/habitScreenComponents/scrollViews/DailyLogScrollView";

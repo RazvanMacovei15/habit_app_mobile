@@ -50,7 +50,7 @@ const AddBodyStatsModal = ({
         backdropTransitionOutTiming={25}
         onBackButtonPress={() => setModalVisible(!modalVisible)}
       >
-        <View className="w-full p-1 bg-white items-center justify-evenly flex flex-col shadow-2xl shadow-slate-900 rounded-2xl">
+        <View className="w-full gap-1 p-2 bg-white items-center justify-evenly flex flex-col shadow-2xl shadow-slate-900 rounded-2xl">
           <AddBodyStat
             title={"Weight"}
             value={""}

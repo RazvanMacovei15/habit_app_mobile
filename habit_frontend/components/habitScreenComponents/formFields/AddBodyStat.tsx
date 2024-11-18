@@ -23,11 +23,9 @@ const AddBodyStat = ({
   handleChangeText,
 }: AddBodyStatFormFieldProps) => {
   return (
-    <View className="flex flex-row items-center justify-stretch py-2">
-      <Text className="w-1/4 text-black text-center text-lg mx-2 my-1">
-        {title}:
-      </Text>
-      <View className="bg-gray-300 mx-2 grow h-10 flex flex-row px-4 rounded-2xl items-center">
+    <View className="flex flex-row items-center justify-stretch border rounded-full p-2 my-1">
+      <Text className="w-1/3 text-black text-start text-lg ">{title}:</Text>
+      <View className="bg-gray-300 grow h-8 flex flex-row px-4 rounded-2xl items-center">
         <TextInput
           className="flex-1 text-gray-800"
           value={value}

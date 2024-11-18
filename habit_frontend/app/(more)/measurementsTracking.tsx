@@ -1,8 +1,9 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import AddBodyStatsModal from "./addBodyStatModal";
+import AddBodyStatsModal from "../../components/modals/addBodyStatModal";
 import { BodyStatsForm } from "@/components/types/BodyStatsForm";
+import { Link } from "expo-router";
 const mockMeasurements = [
   {
     weight: 70,
@@ -106,6 +107,7 @@ const mockMeasurements = [
 ];
 
 const MeasurementsTracking = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   const initialBodyStatsForm = {
     weight: "",
     waist: "",
@@ -139,24 +141,25 @@ const MeasurementsTracking = () => {
           ))}
         </ScrollView>
         <View className="w-full items-center justify-center bg-gray-200 px-16 py-2">
-          <Pressable className="p-1 w-full rounded-3xl">
+          <Pressable
+            className="p-1 w-full rounded-3xl"
+            onPress={() => setModalVisible(true)}
+          >
             <Text className="text-xl text-center border border-dashed p-5 w-full rounded-full">
               + add new measurement
             </Text>
-            <AddBodyStatsModal
-              modalVisible={false}
-              setModalVisible={function (value: boolean): void {
-                throw new Error("Function not implemented.");
-              }}
-              bodyStatsForm={initialBodyStatsForm}
-              setHabitForm={function (value: any): void {
-                throw new Error("Function not implemented.");
-              }}
-              handleCreateHabit={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-            />
           </Pressable>
+          <AddBodyStatsModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            bodyStatsForm={bodyForm}
+            setHabitForm={function (value: any): void {
+              throw new Error("Function not implemented.");
+            }}
+            handleCreateBodyStats={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </View>
       </View>
     </View>

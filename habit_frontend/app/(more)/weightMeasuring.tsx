@@ -1,7 +1,6 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import AddBodyStatsModal from "../../components/modals/AddBodyStatModal";
 import { BodyStatsForm } from "@/components/types/forms/BodyStatsForm";
 import { Link } from "expo-router";
 import { WeightForm } from "@/components/types/forms/WeightForm";

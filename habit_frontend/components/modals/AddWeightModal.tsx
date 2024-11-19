@@ -39,7 +39,9 @@ const AddWeightModal = ({
   // Safely initialize integerPart and decimalPart with fallback to 0 if lastWeight is invalid
   const safeLastWeight = !isNaN(lastWeight) && lastWeight >= 0 ? lastWeight : 0;
   const integerPart = Math.floor(safeLastWeight);
-  const decimalPart = Math.round((safeLastWeight - integerPart) * 10);
+  const decimalPart = Math.round((safeLastWeight - integerPart) * 10).toFixed(
+    2
+  );
 
   console.log("Integer Part:", integerPart, "Decimal Part:", decimalPart);
 

@@ -57,7 +57,9 @@ const MeasurementsTracking = () => {
             >
               <Text className="text-lg ">{today.toString()}</Text>
               <Text className="text-lg">Weight: {measurement.weight}kg</Text>
-              <Text className="text-lg">{GOAL - measurement.weight}</Text>
+              <Text className="text-lg">
+                {(GOAL - measurement.weight).toFixed(1)}
+              </Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -66,7 +68,7 @@ const MeasurementsTracking = () => {
         >
           <Text className={`text-lg`}>Distance to weight goal: </Text>
           <Text className={`text-lg ${differenceColor}`}>
-            {Math.abs(weightDifference)}kg {arrow}
+            {Math.abs(weightDifference).toFixed(1)}kg {arrow}
           </Text>
         </View>
         <View className="w-full items-center justify-center bg-gray-300 px-16 py-2">

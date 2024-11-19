@@ -10,7 +10,7 @@ interface AddBodyStatsModalProps {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
   bodyStatsForm: BodyStatsForm;
-  setHabitForm: (value: any) => void;
+  setBodyStatsForm: (value: any) => void;
   handleCreateBodyStats: () => void;
 }
 
@@ -18,7 +18,7 @@ const AddBodyStatsModal = ({
   modalVisible,
   setModalVisible,
   bodyStatsForm,
-  setHabitForm,
+  setBodyStatsForm,
   handleCreateBodyStats,
 }: AddBodyStatsModalProps) => {
   return (
@@ -39,7 +39,7 @@ const AddBodyStatsModal = ({
             title={"Weight"}
             value={bodyStatsForm.weight}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, weight: e })
+              setBodyStatsForm({ ...bodyStatsForm, weight: e })
             }
             placeholder={"kgs..."}
           />
@@ -47,7 +47,7 @@ const AddBodyStatsModal = ({
             title={"Waist"}
             value={bodyStatsForm.waist}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, waist: e })
+              setBodyStatsForm({ ...bodyStatsForm, waist: e })
             }
             placeholder={"cm..."}
           />
@@ -55,7 +55,7 @@ const AddBodyStatsModal = ({
             title={"Abdomen"}
             value={bodyStatsForm.abdomen}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, abdomen: e })
+              setBodyStatsForm({ ...bodyStatsForm, abdomen: e })
             }
             placeholder={"cm..."}
           />
@@ -63,7 +63,7 @@ const AddBodyStatsModal = ({
             title={"Chest"}
             value={bodyStatsForm.chest}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, chest: e })
+              setBodyStatsForm({ ...bodyStatsForm, chest: e })
             }
             placeholder={"cm..."}
           />
@@ -71,7 +71,7 @@ const AddBodyStatsModal = ({
             title={"Bicep"}
             value={bodyStatsForm.bicep}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, bicep: e })
+              setBodyStatsForm({ ...bodyStatsForm, bicep: e })
             }
             placeholder={"cm..."}
           />
@@ -79,7 +79,7 @@ const AddBodyStatsModal = ({
             title={"Quad"}
             value={bodyStatsForm.quad}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, quad: e })
+              setBodyStatsForm({ ...bodyStatsForm, quad: e })
             }
             placeholder={"cm..."}
           />
@@ -87,7 +87,7 @@ const AddBodyStatsModal = ({
             title={"Neck"}
             value={bodyStatsForm.neck}
             handleChangeText={(e) =>
-              setHabitForm({ ...bodyStatsForm, neck: e })
+              setBodyStatsForm({ ...bodyStatsForm, neck: e })
             }
             placeholder={"cm..."}
           />

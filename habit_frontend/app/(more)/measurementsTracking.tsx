@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { BodyStatsForm } from "@/components/types/forms/BodyStatsForm";
 import { Link } from "expo-router";
 import { BodyStatsDTO } from "@/components/types/BodyStatsDTO";
-import AddBodyStatsModal from "@/components/modals/addBodyStatModal";
+import AddBodyStatsModal from "@/components/modals/AddBodyStatModal";
 
 const mockMeasurements = [
   {
@@ -174,7 +174,7 @@ const MeasurementsTracking = () => {
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             bodyStatsForm={bodyForm}
-            setHabitForm={setBodyForm}
+            setBodyStatsForm={setBodyForm}
             handleCreateBodyStats={handleCreateBodyStats}
           />
         </View>

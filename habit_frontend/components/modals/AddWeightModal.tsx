@@ -39,11 +39,12 @@ const AddWeightModal = ({
   // Safely initialize integerPart and decimalPart with fallback to 0 if lastWeight is invalid
   const safeLastWeight = !isNaN(lastWeight) && lastWeight >= 0 ? lastWeight : 0;
   const integerPart = Math.floor(safeLastWeight);
-  const decimalPart = Math.round((safeLastWeight - integerPart) * 10).toFixed(
-    2
+
+  const decimalPart = Number(
+    Math.round((safeLastWeight - integerPart) * 10).toFixed(2)
   );
 
-  console.log("Integer Part:", integerPart, "Decimal Part:", decimalPart);
+  // console.log("Integer Part:", integerPart, "Decimal Part:", decimalPart);
 
   const [value, setValue] = useState(integerPart);
   const [decimalValue, setDecimalValue] = useState(decimalPart);
@@ -77,7 +78,7 @@ const AddWeightModal = ({
               value={value}
               onValueChanged={({ item: { value: newValue } }) => {
                 setValue(newValue);
-                updateWeightForm(newValue, decimalValue);
+                updateWeightForm(newValue, Number(decimalValue));
                 setIsChanging(false); // Reset isChanging to false after value change
               }}
               //disable save on value changing
@@ -87,6 +88,7 @@ const AddWeightModal = ({
               visibleItemCount={3}
               initialNumToRender={5}
               maxToRenderPerBatch={10}
+              updateCellsBatchingPeriod={5}
             />
             <Text className="text-xl">.</Text>
             <WheelPicker
@@ -94,9 +96,9 @@ const AddWeightModal = ({
               value={decimalValue}
               onValueChanged={({ item: { value: newDecimalValue } }) => {
                 setDecimalValue(newDecimalValue);
-                updateWeightForm(value, newDecimalValue);
+                updateWeightForm(decimalValue, Number(newDecimalValue));
                 setIsChanging(false); // Reset isChanging to false after value change
-                console.log(weightForm);
+                console.log(decimalValue);
               }}
               onValueChanging={() => setIsChanging(true)}
               width={50}

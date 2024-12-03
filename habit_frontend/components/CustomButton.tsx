@@ -25,7 +25,7 @@ const CustomButon = ({ handlePress, title, isLoading }: SigninButtonProps) => {
           "bg-yellow-400 text-black p-5 w-full text-center rounded-xl text-2xl"
         }
       >
-        {title}
+        {isLoading ? "Verifying credentials" : title}
       </Text>
     </TouchableOpacity>
   );

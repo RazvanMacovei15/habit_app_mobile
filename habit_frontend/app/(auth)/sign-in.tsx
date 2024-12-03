@@ -7,33 +7,30 @@ import { Link, router, useFocusEffect } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 
 const SignIn = () => {
-// Exit app when back button is pressed
-const exitApp = () => {
-  BackHandler.exitApp();
-};
+  // Exit app when back button is pressed
+  const exitApp = () => {
+    BackHandler.exitApp();
+  };
 
-// Handle back button on this specific screen
-useFocusEffect(
-  useCallback(() => {
-    const onBackPress = () => {
-      // Customize the behavior as needed (e.g., show confirmation dialog)
-      Alert.alert(
-        'Exit App',
-        'Are you sure you want to exit?',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Yes', onPress: exitApp }
-        ]
-      );
-      return true; // Prevent default behavior
-    };
+  // Handle back button on this specific screen
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        // Customize the behavior as needed (e.g., show confirmation dialog)
+        Alert.alert("Exit App", "Are you sure you want to exit?", [
+          { text: "Cancel", style: "cancel" },
+          { text: "Yes", onPress: exitApp },
+        ]);
+        return true; // Prevent default behavior
+      };
 
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
-    // Clean up the event listener when the screen loses focus
-    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  }, [])
-);
+      // Clean up the event listener when the screen loses focus
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
 
   const { onLogin, onRegister } = useAuth();
 
@@ -103,7 +100,9 @@ useFocusEffect(
 
           <CustomButon
             handlePress={submitLogin}
-            title={"Sign in"}
+            //change the title if isSubmitting is true to veriying credentials
+
+            title={isSubmitting ? "Verifying credentials" : "Sign In"}
             isLoading={isSubmitting}
           />
           <View className="w-full flex flex-row justify-center items-center mt-5">

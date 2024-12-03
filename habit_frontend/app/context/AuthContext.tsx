@@ -45,21 +45,35 @@ export const AuthProvider = ({ children }: any) => {
 
   // Effect to load the token from secure storage and set it in the state
   useEffect(() => {
-    const loadToken = async () => {
-      const token = await SecureStorage.getItemAsync(TOKEN_KEY); // Retrieve token from secure storage
-
-      if (token) {
-        // If token exists, update authentication state
-        setAuthState({
-          token,
-          authenticated: true,
-        });
-        // Set the token in axios headers for all future requests
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      }
+    const initializeAuth = async () => {
+      await verifyToken();
     };
-    loadToken();
+    initializeAuth();
   }, []);
+
+  const verifyToken = async () => {
+    const token = await SecureStorage.getItemAsync(TOKEN_KEY);
+    if (token) {
+      try {
+        const result = await axios.get(`${API_URL}auth/verify`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (result?.status === 200) {
+          setAuthState({
+            token,
+            authenticated: true,
+          });
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          return true;
+        } else {
+          throw new Error("Token invalid or expired.");
+        }
+      } catch (error) {
+        console.error("Token verification failed:", error);
+        await onLogout(); // Log out the user if the token is invalid
+      }
+    }
+  };
 
   const onRegister = async (
     username: string,
@@ -69,22 +83,22 @@ export const AuthProvider = ({ children }: any) => {
     try {
       console.log(username); // Log username for debugging
       console.log(email); // Log email for debugging
-  
+
       // Send POST request to the registration endpoint
       const result = await axios.post(`${API_URL}auth/signup`, {
         username,
         email,
         password,
       });
-  
+
       console.log(result); // Log result for debugging
-  
+
       // After successful registration, log the user in
       if (result.status === 200 || result.status === 201) {
         // Call the onLogin function directly
         const loginResult = await onLogin(email, password);
-  
-        if ('error' in loginResult) {
+
+        if ("error" in loginResult) {
           // Handle login error if it occurs
           console.error("Login after registration failed:", loginResult.msg);
           return {
@@ -94,23 +108,21 @@ export const AuthProvider = ({ children }: any) => {
         }
         return loginResult; // Return login result
       }
-  
+
       return result; // Return the registration result
     } catch (error) {
       console.error(error); // Log error for debugging
-  
+
       // Extract error message safely
       const errorMsg =
         (error as any)?.response?.data?.msg || "An unexpected error occurred.";
-  
+
       return {
         error: true,
         msg: errorMsg,
       };
     }
   };
-  
-  
 
   const onLogin = async (email: string, password: string) => {
     try {
@@ -159,30 +171,44 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   // Function to handle user logout
-const onLogout = async () => {
-  console.log("onLogout called");
+  const onLogout = async () => {
+    try {
+      // Delete token from secure storage
+      await SecureStorage.deleteItemAsync(TOKEN_KEY);
 
-  try {
-    // Delete token from secure storage
-    await SecureStorage.deleteItemAsync(TOKEN_KEY);
+      // Remove token from axios headers
+      axios.defaults.headers.common["Authorization"] = "";
 
-    // Remove token from axios headers
-    axios.defaults.headers.common["Authorization"] = "";
+      // Reset authentication state
+      setAuthState({
+        token: null,
+        authenticated: false,
+      });
+      console.log("User logged out successfully");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      // Navigate to the login/sign-in screen
+      router.push("/sign-in");
+    }
+  };
 
-    // Reset authentication state
-    setAuthState({
-      token: null,
-      authenticated: false,
-    });
-    console.log("User logged out successfully");
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response?.status === 401) {
+          console.error("Token expired or invalid. Logging out.");
+          await onLogout();
+        }
+        return Promise.reject(error);
+      }
+    );
 
-  } catch (error) {
-    console.error("Error during logout:", error);
-  } finally {
-    // Navigate to the login/sign-in screen
-    router.push("/sign-in");
-  }
-};
+    return () => {
+      axios.interceptors.response.eject(interceptor); // Cleanup interceptor on unmount
+    };
+  }, [onLogout]);
 
   // Define the values that will be provided by the authentication context
   const value = {
@@ -195,7 +221,6 @@ const onLogout = async () => {
   // Return the context provider with the specified value, wrapping around children components
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-function dispatch(arg0: { type: string; }) {
+function dispatch(arg0: { type: string }) {
   throw new Error("Function not implemented.");
 }
-

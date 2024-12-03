@@ -10,36 +10,12 @@ const MeasurementsTracking = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState<WeightDTO[]>([]);
 
-  const initialWeightForm = {
-    weight: 0,
-  };
-  const [weightForm, setWeightForm] = useState<WeightForm>(initialWeightForm);
-
   const today = format(new Date(), "yyyy-MM-dd");
-
-  const handleWeightStats = () => {
-    const newBodyStats: WeightDTO = {
-      weight: weightForm.weight,
-    };
-    const newData = [...data, newBodyStats];
-    setData(newData);
-    setModalVisible(false);
-    setWeightForm(initialWeightForm);
-  };
 
   const GOAL = 78;
 
-  const getWeightDifference = () => {
-    if (data.length < 2) return 0;
-    const lastWeight = data[data.length - 1].weight;
-    const penultimateWeight = data[data.length - 2].weight;
-    return GOAL - lastWeight;
-  };
-
-  const weightDifference = getWeightDifference();
-  const isPositive = weightDifference > 0;
-  const differenceColor = isPositive ? "text-green-500" : "text-red-500";
-  const arrow = isPositive ? "↑" : "↓";
+  // const differenceColor = isPositive ? "text-green-500" : "text-red-500";
+  // const arrow = isPositive ? "↑" : "↓";
 
   return (
     <View className="flex flex-col">
@@ -63,14 +39,14 @@ const MeasurementsTracking = () => {
             </Pressable>
           ))}
         </ScrollView>
-        <View
+        {/* <View
           className={`flex flex-row w-full bg-gray-300 items-center justify-center py-3 ${differenceColor}`}
         >
           <Text className={`text-lg`}>Distance to weight goal: </Text>
           <Text className={`text-lg ${differenceColor}`}>
             {Math.abs(weightDifference).toFixed(1)}kg {arrow}
           </Text>
-        </View>
+        </View> */}
         <View className="w-full items-center justify-center bg-gray-300 px-16 py-2">
           <Pressable
             className="p-1 w-full rounded-3xl"
@@ -80,14 +56,14 @@ const MeasurementsTracking = () => {
               + add new measurement
             </Text>
           </Pressable>
-          <AddWeightModal
+          {/* <AddWeightModal
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             weightForm={weightForm}
             setWeightForm={setWeightForm}
             handleCreateWeight={handleWeightStats}
             lastWeight={data[data.length - 1]?.weight}
-          />
+          /> */}
         </View>
       </View>
     </View>
